@@ -1,0 +1,21 @@
+(;FF[4]SZ[19]
+
+RU[japanese]
+KM[6.5]
+HA[0]
+RE[W+R]
+PB[kata1-b18c]
+PW[kata1-b28c]
+
+;B[pp]C[0.48 0.52 -0.2];W[dd]C[0.48 0.52 -0.3]
+;B[dp]C[0.48 0.52 -0.3];W[pd]C[0.48 0.52 -0.3]
+;B[dc]C[0.48 0.52 -0.3];W[ed]C[0.48 0.52 -0.3]
+;B[fc]C[0.48 0.52 -0.3];W[cq]C[0.48 0.52 -0.3])
+
+
+/*
+  ;AW[ab][ac][ad] [ab:ad][nn]  compress | list
+  ;VW[ab:ad][cb][ce]
+
+  ;SZ[9] [9:9]
+*/
