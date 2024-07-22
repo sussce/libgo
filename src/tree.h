@@ -1,99 +1,56 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+
+typedef unsigned int uint;
+typedef unsigned long ulong;
+
+/* enum { */
+/*   in_unset = 0, /\* 0u *\/ */
+/*   in_root = 1<<0, /\* 1u *\/ */
+/*   in_node = 1<<1, /\* 2u *\/ */
+/*   in_next = 1<<2, /\* 4u *\/ */
+/*   in_sib = 1<<3, /\* 8u *\/ */
+/*   in_pid = 1<<4, /\* 16u *\/ */
+/*   in_pv = 1<<5 /\* 32U *\/ */
+/* }; */
+
+#define in_unset 0u
+#define in_root 1u
+#define in_node 2u
+#define in_next 4u
+#define in_sib 8u
+#define in_pid 16u
+#define in_pv 32u
 
 typedef struct _T T;
 typedef struct _L L;
+
 struct _T {
+  uint id;
+  
   T *prev, *next;
   T *prev_sib, *next_sib;
-
-  int id;
 };
 struct _L {
   L* next;
 };
-enum {
-  in_unset = 0, /* 0u */
-  in_root = 1<<0, /* 1u */
-  in_node = 1<<1, /* 2u */
-  in_next = 1<<2, /* 4u */
-  in_sib = 1<<3, /* 8u */
-  in_pid = 1<<4, /* 16u */
-  in_pv = 1<<5 /* 32U */
-};
 
-typedef void (*callback) (...);
+static uint id_atomic = 0;
 
-static int id_atomic = 0;
+typedef void (*t_call)(T* t);
 
-void t_print (T* t);
-T* t_fork (char** curr, T* pt, int prev);
-void t_pre_order (T* t, callback call);
+L* l_add(L* l, L* pl);
+L* l_new();
 
-T* t_last_sib (T* t);
-T* t_del (int id);
-T* t_add (T* t, int id);
-T* t_new ();
-
-T* t_fork (char** curr, T* pt, int prev) {
-  T *root = NULL, *t = pt;
-  int inchar = in_unset;
-
-  while ((*curr) < (*curr) + strlen ((*curr))) {
-    if (**curr == '(') {
-      //check_flag (*curr, in);
-      if ((inchar != in_unset) && !(inchar & in_node) &&
-          (inchar != in_next) && (inchar != in_sib)) {
-        fprintf (stderr, "error, char %c must follow chars rn)\n", **curr);
-        exit (-1);
-      }
-
-      if ((inchar != in_unset) && (inchar != in_root))
-        t_fork (curr, t, in_node);
-
-      if (inchar == in_unset)
-        inchar = in_root;
-      else if (inchar == in_next)
-        inchar = in_sib;
-      else if (inchar == in_node)
-        inchar = in_next;
-      else if (inchar == in_root)
-        inchar = in_node;
-    }
-    else if (**curr == ')') {
-      /* ?if extra sib ) */
-      if (!(inchar & in_node) && (inchar != in_sib)) {
-        fprintf (stderr, "error, char %c must follow chars n)\n", **curr);
-        exit (-1);
-      }
-      
-      return root;
-    }
-    else if (!isspace ((unsigned char)(**curr))) {
-      if ((inchar != in_root) && !(inchar & in_node)) {
-        fprintf (stderr, "error, char %c must follow chars n(\n", **curr);
-        exit (-1);
-      }
-      
-      t = t_add (t, **curr - '0');
-      
-      if (inchar == in_root)
-        root = t;
- 
-      if (inchar == in_root)
-        inchar = in_node | prev;
-      else if (inchar & in_root)
-        inchar &= ~in_root;
-    }
-
-    (*curr)++;
-  }
-
-  fprintf(stderr, "error, char ) must follow\n");
-  exit (-1);
-}
+T* t_parse_order(char** curr, T* pt, uint prev);
+void t_seq(T* t, t_call call);
+T* t_add(T* t, T* pt);
+T* t_new(int id);
 
 /*
         4
@@ -125,55 +82,138 @@ post_lr+n 3 6 7 8 9 5 1 y x 2 4
 level 4 2 x 1 5 9 y 3 7 8 6
 */
 
-void t_seq (T* t, callback call) {
-  if (t == NULL)
-    return;
+L* l_add(L* l, L* pl) {
+  if(pl == NULL)
+    return l;
 
-  t_seq (t->next, call);  
-  t_seq (t->next_sib, call);
-  call (t);
+  for(; pl->next != NULL;
+      pl = pl->next);
+
+  pl->next = l;
   
+  return l;
 }
 
-T* t_last_sib (T* t) {
-  T* _t;
-  for (_t = t->next;
-       _t!= NULL && _t->next_sib != NULL;
-       _t = _t->next_sib);
-  
-  if (_t == NULL)
-    return t;
+L* l_new() {
+  L* new = (L*)malloc(sizeof(L));
 
-  return _t;
-}
-
-T* t_add (T* t, int id) {
-  T* new = t_new ();
-  T* _t;
-
-  new->id = id; //_id++;
-  
-  if (t == NULL) {
-    return new;
-  }
-  
-  _t = t_last_sib (t);
-  
-  if (_t->next == NULL) {
-    _t->next = new;
-    new->prev = _t;
-  }
-  else { 
-    _t->next_sib = new;
-    new->prev = t;
-    new->prev_sib = _t;
+  if(new == NULL) {
+    fprintf(stderr, "l_new(): mem alloc failed\n");
+    exit(-1);
   }
 
   return new;
 }
 
-T* t_new () {
-  T* new = malloc (sizeof (T));
+T* t_parse_order(char** curr, T* pt, uint prev) {
+  T *root = NULL,
+    *t = pt;
+  uint inchar = in_unset;
+
+  while((*curr) < (*curr) + strlen ((*curr))) {
+    if(**curr == '(') {
+      //check_flag (*curr, in);
+      if((inchar != in_unset) && !(inchar & in_node) &&
+         (inchar != in_next) && (inchar != in_sib)) {
+        fprintf(stderr, "error, char %c must follow chars rn)\n", **curr);
+        exit(-1);
+      }
+
+      if((inchar != in_unset) && (inchar != in_root))
+        t_parse_order(curr, t, in_node);
+
+      if(inchar == in_unset)
+        inchar = in_root;
+      else if(inchar == in_next)
+        inchar = in_sib;
+      else if(inchar == in_node)
+        inchar = in_next;
+      else if(inchar == in_root)
+        inchar = in_node;
+    }
+    else if(**curr == ')') {
+      /* ?if extra sib ) */
+      if(!(inchar & in_node) && (inchar != in_sib)) {
+        fprintf(stderr, "error, char %c must follow chars n)\n", **curr);
+        exit(-1);
+      }
+      
+      return root;
+    }
+    else if(isdigit((int)(**curr))) {
+      if((inchar != in_root) && !(inchar & in_node)) {
+        fprintf(stderr, "error, char %c must follow chars n(\n", **curr);
+        exit(-1);
+      }
+
+      t = t_add(t_new(**curr - '0'), t);     
+      
+      if(inchar == in_root)
+        root = t;
+ 
+      if(inchar == in_root)
+        inchar = in_node | prev;
+      else if(inchar & in_root)
+        inchar &= ~in_root;
+    }
+    else {
+      if(!isspace((int)(**curr))) {
+        fprintf(stderr, "error, char %c unknown\n", **curr);
+        exit(-1);
+      }
+    }
+
+    (*curr)++;
+  }
+
+  fprintf(stderr, "error, char ) must follow\n");
+  exit(-1);
+}
+
+void t_seq(T* t, t_call call) {
+  if(t == NULL)
+    return;
+
+  call(t);
+  t_seq(t->next, call);  
+  t_seq(t->next_sib, call);
+}
+
+T* t_add(T* t, T* pt) {
+  if(pt == NULL)
+    return t;
+
+  if(pt->next == NULL) {
+    pt->next = t;
+    t->prev = pt;
+  }
+  else {
+    T* sib;
+    
+    for(sib = pt->next;
+        sib->next_sib != NULL;
+        sib = sib->next_sib);
+    
+    sib->next_sib = t;
+    t->prev_sib = sib;
+    t->prev = pt;
+  }
+
+  return t;
+}
+
+T* t_new(int id) {
+  T* new = (T*)malloc(sizeof(T));
+
+  if(new == NULL) {
+    fprintf(stderr, "t_new(), mem alloc failed\n");
+    exit(-1);
+  }
+  
+  memset(new, 0, sizeof(T));
+  new->id = id == -1 ? id_atomic : id;
+  id_atomic++;
+  
   return new;
 }
 

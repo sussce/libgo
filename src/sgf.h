@@ -3,6 +3,9 @@
 
 #include "predef.h"
 
+typedef unsigned int uint;
+typedef unsigned long ulong;
+
 /* ffff ffff ffff ffff ffff ffff ffff ffff */
 
 #define root_t 0x1u
