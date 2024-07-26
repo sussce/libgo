@@ -9,16 +9,6 @@
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
-/* enum { */
-/*   in_unset = 0, /\* 0u *\/ */
-/*   in_root = 1<<0, /\* 1u *\/ */
-/*   in_node = 1<<1, /\* 2u *\/ */
-/*   in_next = 1<<2, /\* 4u *\/ */
-/*   in_sib = 1<<3, /\* 8u *\/ */
-/*   in_pid = 1<<4, /\* 16u *\/ */
-/*   in_pv = 1<<5 /\* 32U *\/ */
-/* }; */
-
 #define in_unset 0u
 #define in_root 1u
 #define in_node 2u
@@ -26,6 +16,9 @@ typedef unsigned long ulong;
 #define in_sib 8u
 #define in_pid 16u
 #define in_pv 32u
+
+#define t_ptr(ptr, type, member) \
+  container_of(ptr, type, member)
 
 typedef struct _T T;
 typedef struct _L L;
@@ -37,71 +30,72 @@ struct _T {
   T *prev_sib, *next_sib;
 };
 struct _L {
-  L* next;
+  L *prev, *next;
 };
 
-static uint id_atomic = 0;
+static uint id_atom = 0;
 
 typedef void (*t_call)(T* t);
 
-L* l_add(L* l, L* pl);
-L* l_new();
+static inline void l_init(L* l) {
+  l->prev = l;
+  l->next = l;
+}
 
-T* t_parse_order(char** curr, T* pt, uint prev);
-void t_seq(T* t, t_call call);
-T* t_add(T* t, T* pt);
-T* t_new(int id);
-
-/*
-        4
-      /   \
-     2-----x
-   / | \   |
-  1--5--9  y
- /  /   |
-3  7    8
-  / 
- 6    
-
-
- 0—a—b—c
- │ └-d—e
- └-f—g—h—i
-   └-j
-
- R—B—W—B
- │ └-W—B   
- └-B—W—B—W
-   └-W
- 
-pre_nlr 4 2 1 3 5 7 6 9 8 72 73
-pre_nrl y x 8 9 6 7 5 3 1 2 4
-post_lrn 3 1 6 7 5 8 9 2 73 72 4
-post_lr+n 3 6 7 8 9 5 1 y x 2 4 
-
-level 4 2 x 1 5 9 y 3 7 8 6
-*/
-
-L* l_add(L* l, L* pl) {
+static inline L* l_add(L* l, L* pl) {
+  L* next;
+  
   if(pl == NULL)
     return l;
 
-  for(; pl->next != NULL;
-      pl = pl->next);
-
+  next = pl->next;
+  
+  l->prev = pl;
+  l->next = next;
   pl->next = l;
+  next->prev = l;
   
   return l;
 }
 
-L* l_new() {
-  L* new = (L*)malloc(sizeof(L));
+static inline void t_init(T* t, int id) {
+  t->id = id == -1 ? id_atom++ : id;
+}
 
-  if(new == NULL) {
-    fprintf(stderr, "l_new(): mem alloc failed\n");
-    exit(-1);
+static inline T* t_add(T* t, T* pt) {
+  if(pt == NULL)
+    return t;
+
+  if(pt->next == NULL) {
+    pt->next = t;
+    t->prev = pt;
+  }
+  else {
+    T* sib;
+    
+    for(sib = pt->next;
+        sib->next_sib != NULL;
+        sib = sib->next_sib);
+    
+    sib->next_sib = t;
+    t->prev_sib = sib;
+    t->prev = pt;
   }
 
+  return t;
+}
+
+static inline T* t_new(int id) {
+  T* new = (T*)malloc(sizeof(T));
+
+  if(new == NULL) {
+    fprintf(stderr, "t_new(), mem alloc failed\n");
+    exit(-1);
+  }
+  
+  memset(new, 0, sizeof(T));
+  t_init(new, id);
+  
   return new;
 }
 
@@ -171,50 +165,12 @@ T* t_parse_order(char** curr, T* pt, uint prev) {
 }
 
 void t_seq(T* t, t_call call) {
-  if(t == NULL)
-    return;
-
   call(t);
-  t_seq(t->next, call);  
-  t_seq(t->next_sib, call);
-}
 
-T* t_add(T* t, T* pt) {
-  if(pt == NULL)
-    return t;
-
-  if(pt->next == NULL) {
-    pt->next = t;
-    t->prev = pt;
-  }
-  else {
-    T* sib;
-    
-    for(sib = pt->next;
-        sib->next_sib != NULL;
-        sib = sib->next_sib);
-    
-    sib->next_sib = t;
-    t->prev_sib = sib;
-    t->prev = pt;
-  }
-
-  return t;
-}
-
-T* t_new(int id) {
-  T* new = (T*)malloc(sizeof(T));
-
-  if(new == NULL) {
-    fprintf(stderr, "t_new(), mem alloc failed\n");
-    exit(-1);
-  }
-  
-  memset(new, 0, sizeof(T));
-  new->id = id == -1 ? id_atomic : id;
-  id_atomic++;
-  
-  return new;
+  if(t->next)
+    t_seq(t->next, call);
+  if(t->next_sib)
+    t_seq(t->next_sib, call);
 }
 
 #endif /* _TREE_H_ */

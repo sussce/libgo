@@ -1,9 +1,13 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include "tree.h"
+
 #include "prop.h"
+#include "tree.h"
+#include "predef.h"
 
 typedef unsigned int uint;
 typedef unsigned long ulong;
@@ -16,24 +20,15 @@ struct _Node {
   T t;
 };
 
-#define t_new() { id_atomic++, NULL, NULL, NULL, NULL }
-
-prop = p_new();
-node->prop = prop;
-
 typedef void (*n_call)(Node* node);
-
-Node* n_add(Node* node, Node* pnode);
-Node* n_new();
-
-//Node* n_find();
-//Node* n_add_prop();
+typedef void (*n_prop_call)(Prop* prop);
+typedef void (*n_value_call)(Value* value);
 
 Node* n_add(Node* node, Node* pnode) {
   if(pnode == NULL)
     return node;
   
-  t_add(node->t, pnode->t);
+  t_add(&node->t, &pnode->t);
 
   return node;
 }
@@ -47,17 +42,33 @@ Node* n_new() {
   }
   
   memset(new, 0, sizeof(Node));
-  t_new(&new->t);
+  t_init(&new->t, -1);
   new->id = new->t.id;
     
   return new;
 }
 
-void t_init(t) {
-  
+void n_seq_value(Value* value, L* head, n_value_call call) {
+  call(value);
+
+  if(value->l.next != head)
+    n_seq_value(t_ptr(value->l.next, Value, l), head, call);
 }
 
-Node* node = n_new();
-node->prop = prop;
+void n_seq_prop(Prop* prop, L* head, n_prop_call call) {
+  call(prop);
+ 
+  if(prop->l.next != head)
+    n_seq_prop(t_ptr(prop->l.next, Prop, l), head, call);
+}
+
+void n_seq(Node* node, n_call call) {
+  call(node);
+  
+  if(node->t.next)
+    n_seq(t_ptr(node->t.next, Node, t), call);
+  if(node->t.next_sib)
+    n_seq(t_ptr(node->t.next_sib, Node, t), call);
+}
 
 #endif /* _NODE_H_ */

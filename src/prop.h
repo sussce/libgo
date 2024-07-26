@@ -1,7 +1,10 @@
 #ifndef _PROP_H_
 #define _PROP_H_
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
 #include "tree.h"
 
 typedef unsigned int uint;
@@ -19,21 +22,14 @@ struct _Prop {
   Value* value;
   uint token;
   ulong uid;
-  L l; 
+  L l;
 };
-
-Value* v_add(Value* value, Value* pvalue);
-Value* v_new();
-Prop* p_add(Prop* prop, Prop* pprop);
-Prop* p_new();
-
-//p_find; 
 
 Value* v_add(Value* value, Value* pvalue) {
   if(pvalue == NULL)
     return value;
 
-  l_add(value->l, pvalue->l);
+  l_add(&value->l, &pvalue->l);
   
   return value;
 }
@@ -47,7 +43,8 @@ Value* v_new() {
   }
   
   memset(new, 0, sizeof(Value));
-
+  l_init(&new->l);
+  
   return new;
 }
 
@@ -55,7 +52,7 @@ Prop* p_add(Prop* prop, Prop* pprop) {
   if(pprop == NULL)
     return prop;
  
-  l_add(&(prop->l), &(pprop->l));
+  l_add(&prop->l, &pprop->l);
 
   return prop;
 }
@@ -69,7 +66,8 @@ Prop* p_new() {
   }
     
   memset(new, 0, sizeof(Prop));
-   
+  l_init(&new->l);
+  
   return new;
 }
 

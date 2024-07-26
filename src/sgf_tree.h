@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
 #include "node.h"
 #include "prop.h"
 
@@ -21,15 +22,6 @@ C [
  ;B[aa] C[a1] ;W[b]C[b1] (;B[cc]C[c1] ;W[dd]C[d1]) (;B[ee]C[e1] ;W[ff]C[f1]))
 */
 
-/* enum {
-  n_unset = 0,
-  in_root = 1<<0,
-  in_node = 1<<1,
-  in_next = 1<<2,
-  in_sib = 1<<3,
-  in_pid = 1<<4,
-  in_pv = 1<<5
-};*/
 #define in_unset 0u
 #define in_root 1u
 #define in_node 2u
@@ -100,7 +92,7 @@ char* t_alloc(char* start, size_t size) {
   char* p = (char*)malloc((size + 1)*sizeof(char));
 
   if(p == NULL) {
-    fprintf(stderr, "get_string(), mem alloc failed\n");
+    fprintf(stderr, "t_alloc(), mem alloc failed\n");
     exit(-1);
   }
 
@@ -208,13 +200,6 @@ Node* t_parse_node(char** curr, int prev) {
   Prop* prop = NULL;
   int inchar = in_unset;
 
-  if(prev == in_root){
-    printf("root, ");
-  }
-  else {
-    printf("node, ");
-  }
-  
   while(*curr < (*curr + strlen(*curr))) {
     if(**curr == '(') {
       if (inchar != in_pv) {
@@ -255,7 +240,7 @@ Node* t_parse_node(char** curr, int prev) {
       if(node->prop == NULL)
         node->prop = prop;
 
-      printf("%s[%s]", prop->id, prop->value->v);
+      //printf("%s[%s]", prop->id, prop->value->v);
       
       inchar = in_pv;
     }
@@ -327,7 +312,7 @@ Node* t_parse(char** curr, Node* pnode, int prev) {
                                 ((inchar == in_root) && (prev == in_root)) ?
                                 in_root : in_node), node);
       
-      printf("\n");
+      //printf("\n");
       
       //if(inchar == in_root)
       if(root == NULL)

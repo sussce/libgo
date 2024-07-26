@@ -1,7 +1,23 @@
 #include <stdio.h>
-#include "./src/node.h"
 #include "./src/sgf_tree.h"
-#include "./src/predef.h"
+
+void print_value(Value* value) {
+  printf("[%s]", value->v);
+}
+
+void print_prop(Prop* prop) {
+  printf("%s", prop->id);
+  n_seq_value(prop->value, &prop->value->l, print_value);
+}
+
+void print_node(Node* node) {
+  n_seq_prop(node->prop, &node->prop->l, print_prop);
+  printf("\n");
+}
+
+void print_t(T* t) {
+  printf("%d", t->id);
+}
 
 int main(int argc, char** argv) {
   char* order =
@@ -11,5 +27,7 @@ int main(int argc, char** argv) {
  
   Node* root = t_parse(curr, NULL, in_root);
 
+  n_seq(root, print_node);
+  
   return 0;
 }
