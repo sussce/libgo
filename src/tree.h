@@ -6,16 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 
-typedef unsigned int uint;
-typedef unsigned long ulong;
-
-#define in_unset 0u
-#define in_root 1u
-#define in_node 2u
-#define in_next 4u
-#define in_sib 8u
-#define in_pid 16u
-#define in_pv 32u
+#include "predef.h"
 
 #define t_ptr(ptr, type, member) \
   container_of(ptr, type, member)

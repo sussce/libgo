@@ -19,6 +19,14 @@ void print_t(T* t) {
   printf("%d", t->id);
 }
 
+enum {
+  ff_m = 1
+};
+  
+void x(int a) {
+  printf("%d\n", a);
+}
+
 int main(int argc, char** argv) {
   char* order =
     " (;F F [\\[4\\]] S Z [\\(19\\) \\;sz]"
@@ -28,6 +36,8 @@ int main(int argc, char** argv) {
   Node* root = t_parse(curr, NULL, in_root);
 
   n_seq(root, print_node);
-  
+
+  char* p = "ff";
+
   return 0;
 }

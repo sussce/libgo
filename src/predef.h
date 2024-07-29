@@ -6,6 +6,15 @@
 
 typedef unsigned int uint;
 typedef unsigned long ulong;
+typedef unsigned char uchar;
+
+#define in_unset 0u
+#define in_root 0x1u
+#define in_node 0x2u
+#define in_next 0x4u
+#define in_sib 0x8u
+#define in_pid 0x10u
+#define in_pv 0x20u
 
 #define typeof_member(T, m)	typeof(((T*)0)->m)
 

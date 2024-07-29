@@ -1,18 +1,16 @@
 #ifndef _TOKEN_H_
 #define _TOKEN_H_
 
-/*
-  [SGF FF[4] - Smart Game Format]
-  FF[4] property index
-  This is an alphabetical index to all properties defined in FF[4].
-  New properties are marked with '*', changed properties are marked with '!'.
+/* [SGF FF[4] - Smart Game Format]
+FF[4] property index
+This is an alphabetical index to all properties defined in FF[4].
+New properties are marked with '*', changed properties are marked with '!'.
 
-  ID   Description     property type    property value
-*/
-/* *AP  Application     root	            composed simpletext ':' simpletext */
+   ID   Description     property type    property value */
+/* *AP  Application     root	           composed simpletext ':' simpletext */
 #define TKN_AP
 #define TKN_CA
-#define TKN_FF 0x83400101
+#define TKN_FF
 #define TKN_GM
 #define TKN_ST
 #define TKN_SZ
@@ -38,8 +36,8 @@
 #define TKN_PW
 #define TKN_RE
 #define TKN_RO
-
-#define TKN_HA
+/* HA   Handicap        game-info (Go)      number */
+#define TKN_HA 
 #define TKN_KM
 #define TKN_TB
 #define TKN_TW
@@ -84,35 +82,35 @@
 
 #define TKN                                             \
   /* root */                                            \
-  x(AP) x(CA) x(FF) x(GM) x(ST) x(SZ)                   \
+  u(AP) u(CA) u(FF) u(GM) u(ST) u(SZ)                   \
   /* setup */                                           \
-  x(AB) x(AE) x(AW) x(PL)                               \
+  u(AB) u(AE) u(AW) u(PL)                               \
   /* ginfo */                                           \
-  x(AN) x(BR) x(BT) x(CP) x(DT) x(EV) x(GN)             \
-  x(GC) x(ON) x(OT) x(PB) x(PC) x(PW) x(RE) x(RO)       \
-  x(HA) x(KM) x(TB) x(TW)                               \
+  u(AN) u(BR) u(BT) u(CP) u(DT) u(EV) u(GN)             \
+  u(GC) u(ON) u(OT) u(PB) u(PC) u(PW) u(RE) u(RO)       \
+  u(HA) u(KM) u(TB) u(TW)                               \
   /* move */                                            \
-  x(B) x(KO) x(MN) x(W)                                 \
+  u(B) u(KO) u(MN) u(W)                                 \ 
   /* node anno*/                                        \
-  x(C) x(DM) x(GB) x(GW) x(HO) x(N) x(UC) x(V)          \
-  /* move anno */                                       \
-  x(BM) x(DO) x(IT) x(TE)                               \
+  u(C) u(DM) u(GB) u(GW) u(HO) u(N) u(UC) u(V)          \ 
+  /* move anno */                                       \ 
+  u(BM) u(DO) u(IT) u(TE)                               \
   /* markup */                                          \
-  x(AR) x(CR) x(DD) x(LB) x(LN) x(MA) x(SL) x(SQ) x(TR) \
+  u(AR) u(CR) u(DD) u(LB) u(LN) u(MA) u(SL) u(SQ) u(TR) \ 
   /* timing */                                          \
-  x(BL) x(OB) x(OW) x(WL)                               \
+  u(BL) u(OB) u(OW) u(WL)                               \
   /* misc */                                            \
-  x(FG) x(PM) x(VW)
+  u(FG) u(PM) u(VW)
 
-int max_bits(unsigned long n) {
+int max_bits(ulong n) {
   int c;
   for(c = 0; n; c++, n >>= 1 );
   return c;
 }
 
-unsigned int tkn_gen(char* id, int type) {
-  unsigned int tkn = 0;
-  unsigned long uid = 0;
+uint tkn_gen(char* id, int type) {
+  uint tkn = 0;
+  ulong uid = 0;
 
   if (!id)
     return 0;
@@ -127,8 +125,8 @@ unsigned int tkn_gen(char* id, int type) {
   return tkn;
 }
 
-void tkn_gen () {
-#define x(token) hash_add(#token, TKN_##token)
+void tkn_gen() {
+#define u(token) hash_add(#token, TKN_##token)
   TKN
 #undef x
 }

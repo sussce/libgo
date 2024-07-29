@@ -9,9 +9,6 @@
 #include "tree.h"
 #include "predef.h"
 
-typedef unsigned int uint;
-typedef unsigned long ulong;
-
 typedef struct _Node Node;
 
 struct _Node {

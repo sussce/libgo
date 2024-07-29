@@ -1,0 +1,252 @@
+1. SGF basics
+SGF is a text-only format (not a binary format).
+
+It contains game trees, with all their nodes and properties, and nothing more. Thus the file format reflects the regular internal structure of a tree of property lists. There are no exceptions; if a game needs to store some information on file with the document, a (game-specific) property must be defined for that purpose.
+
+[tree (TA1.gif)] 	[user view of tree (ta3.gif)] 	This tree is written in pre-order as: (root(ab(c)(de))(f(ghi)(j)))
+
+SGF example:
+
+(;FF[4]C[root](;C[a];C[b](;C[c])
+(;C[d];C[e]))
+(;C[f](;C[g];C[h];C[i])
+(;C[j])))
+
+Example for tree structure 	Tree as seen by the user.
+The first line is the main line of play,
+the other lines are variations.
+
+ There are more examples available.
+
+Node numbering:
+When numbering nodes starting with zero is suggested. Nodes should be numbered in the way they are stored in the file.
+Example (of file above): root=0, a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8, i=9 and j=10.
+
+SGF uses the US ASCII char-set for all its property identifiers and property values, except SimpleText & Text. For SimpleText & Text the charset is defined using the CA property.
+
+2. Basic (EBNF) Definition
+The conventions of EBNF are discussed in literature, and on WWW in the Computing Dictionary.
+A quick summary:
+
+  "..." : terminal symbols
+  [...] : option: occurs at most once
+  {...} : repetition: any number of times, including zero
+  (...) : grouping
+    |   : exclusive or
+ italics: parameter explained at some other place
+
+2.1. EBNF Definition
+
+  Collection = GameTree { GameTree }
+  GameTree   = "(" Sequence { GameTree } ")"
+  Sequence   = Node { Node }
+  Node       = ";" { Property }
+  Property   = PropIdent PropValue { PropValue }
+  PropIdent  = UcLetter { UcLetter }
+  PropValue  = "[" CValueType "]"
+  CValueType = (ValueType | Compose)
+  ValueType  = (None | Number | Real | Double | Color | SimpleText |
+		Text | Point  | Move | Stone)
+
+White space (space, tab, carriage return, line feed, vertical tab and so on) may appear anywhere between PropValues, Properties, Nodes, Sequences and GameTrees.
+There are two types of property lists: 'list of' and 'elist of'.
+
+'list of':    PropValue { PropValue }
+'elist of':   ((PropValue { PropValue }) | None)
+              In other words elist is list or "[]".
+
+2.2. Some remarks about properties
+Property-identifiers are defined as keywords using only uppercase letters. Currently there are no more than two uppercase letters per identifier.
+
+The order of properties in a node is not fixed. It may change every time the file is saved and may vary from application to application. Furthermore applications should not rely on the order of property values. The order of values might change as well.
+
+Everybody is free to define additional, private properties, as long as they do not interfere with the standard properties defined in this document.
+
+Therefore, if one is writing a SGF reader, it is important to skip unknown properties. An application should issue a warning message when skipping unknown or faulty properties.
+
+Only one of each property is allowed per node, e.g. one cannot have two comments in one node:
+
+... ;  C[comment1]  B  [dg]  C[comment2] ; ...
+
+This is an error.
+
+Each property has a property type. Property types place restrictions on certain properties e.g. in which nodes they are allowed and with which properties they may be combined.
+2.2.1. Property Types (currently five):
+
+move	Properties of this type concentrate on the move made, not on
+	the position arrived at by this move.
+	Move properties must not be mixed with setup properties within
+	the same node.
+	Note: it's bad style to have move properties in root nodes.
+	(it isn't forbidden though)
+
+setup	Properties of this type concentrate on the current position.
+	Setup properties must not be mixed with move properties within
+	a node.
+
+root	Root properties may only appear in root nodes. Root nodes are
+	the first nodes of gametrees, which are direct descendants from a
+	collection (i.e. not gametrees within other gametrees).
+	They define some global 'attributes' such as board-size, kind
+	of game, used file format etc.
+
+game-info
+	Game-info properties provide some information about the game
+	played (e.g. who, where, when, what, result, rules, etc.).
+	These properties are usually stored in root nodes.
+	When merging a set of games into a single gametree, game infos
+	are stored at the nodes where a game first becomes distinguishable
+	from all other games in the tree.
+
+        A node containing game-info properties is called a game-info node.
+        There may be only one game-info node on any path within the tree,
+        i.e. if some game-info properties occur in one node there may not be
+        any further game-info properties in following nodes:
+        a) on the path from the root node to this node.
+        b) in the subtree below this node.
+
+-	no type. These properties have no special types and may appear
+	anywhere in a collection.
+
+Because of the strict distinction between move and setup properties nodes could also be divided into two classes: move-nodes and setup-nodes. This is important for databases, converting to/from ISHI-format and for some special applications.
+2.2.2. Property attributes (currently only one)
+
+inherit
+	Properties having this attribute affect not only the node containing
+	these properties but also ALL subsequent child nodes as well until
+	a new setting is encountered or the setting gets cleared.
+	I.e. once set all children (of this node) inherit the values of the
+	'inherit' type properties.
+	E.g. VW restricts the view not only of the current node, but
+	of all successors nodes as well. Thus a VW at the beginning of a
+	variation is valid for the whole variation tree.
+	Inheritance stops, if either a new property is encountered and those
+	values are inherited from now on, or the property value gets cleared,
+	typically by an empty value, e.g. VW[].
+
+2.2.3. How to handle unknown/faulty properties
+
+    Unknown properties and their values should be preserved.
+    If an application isn't able to preserve unknown properties, then it has to display a warning message.
+    Illegally formatted game-info properties should be corrected if possible, otherwise preserved.
+    Other illegally formatted properties should be corrected if possible, otherwise deleted.
+    An application has to display a warning message, if it deletes illegally formatted properties. 
+
+2.2.4. Private Properties
+Applications may define their own private properties. Some restrictions apply.
+
+Property identifier: private properties must not use an identifier used by one of the standard properties. You have to use a new identifier instead. The identifier should consist of up to two uppercase letters. SGF doesn't require to limit the identifier to two letters, but some applications could break otherwise.
+
+Property value: private properties may use one of the value types defined in this document or define their own value type. When using a private value type the application has to escape every "]" with a leading "\". Otherwise the file would become unparseable. Should the value type be a combination of two simpler types then it's suggested that your application uses the Compose type.
+
+3. Property Value Types
+
+  UcLetter   = "A".."Z"
+  Digit      = "0".."9"
+  None       = ""
+
+  Number     = [("+"|"-")] Digit { Digit }
+  Real       = Number ["." Digit { Digit }]
+
+  Double     = ("1" | "2")
+  Color      = ("B" | "W")
+
+  SimpleText = { any character (handling see below) }
+  Text       = { any character (handling see below) }
+
+  Point      = game-specific
+  Move       = game-specific
+  Stone      = game-specific
+
+  Compose    = ValueType ":" ValueType
+
+3.1. Double
+Double values are used for annotation properties. They are called Double because the value is either simple or emphasized. A value of '1' means 'normal'; '2' means that it is emphasized.
+Example:
+GB[1] could be displayed as: Good for black
+GB[2] could be displayed as: Very good for black
+
+3.2. Text
+Text is a formatted text. White spaces other than linebreaks are converted to space (e.g. no tab, vertical tab, ..).
+
+Formatting:
+Soft line break: linebreaks preceded by a "\" (soft linebreaks are converted to "", i.e. they are removed)
+Hard line breaks: any other linebreaks encountered
+
+Attention: a single linebreak is represented differently on different systems, e.g. "LFCR" for DOS, "LF" on Unix. An application should be able to deal with following linebreaks: LF, CR, LFCR, CRLF.
+
+Applications must be able to handle Texts of any size. The text should be displayed the way it is, though long lines may be word-wrapped, if they don't fit the display.
+
+Escaping: "\" is the escape character. Any char following "\" is inserted verbatim (exception: whitespaces still have to be converted to space!). Following chars have to be escaped, when used in Text: "]", "\" and ":" (only if used in compose data type).
+
+Encoding: texts can be encoded in different charsets. See CA property.
+
+3.2.1. Example:
+
+C[Meijin NR: yeah, k4 is won\
+derful
+sweat NR: thank you! :\)
+dada NR: yup. I like this move too. It's a move only to be expected from a pro. I really like it :)
+jansteen 4d: Can anyone\
+ explain [me\] k4?]
+
+could be rendered as:
+
+Meijin NR: yeah, k4 is wonderful
+sweat NR: thank you! :)
+dada NR: yup. I like this move too. It's a move only to be expected
+from a pro. I really like it :)
+jansteen 4d: Can anyone explain [me] k4?
+
+3.3. SimpleText
+SimpleText is a simple string. Whitespaces other than space must be converted to space, i.e. there's no newline! Applications must be able to handle SimpleTexts of any size.
+
+Formatting: linebreaks preceded by a "\" are converted to "", i.e. they are removed (same as Text type). All other linebreaks are converted to space (no newline on display!!).
+
+Escaping (same as Text type): "\" is the escape character. Any char following "\" is inserted verbatim (exception: whitespaces still have to be converted to space!). Following chars have to be escaped, when used in SimpleText: "]", "\" and ":" (only if used in compose data type).
+
+Encoding (same as Text type): SimpleTexts can be encoded in different charsets. See CA property.
+
+3.4. Stone
+This type is used to specify the point and the piece that should be placed at that point. If a game doesn't have a distinguishable set of pieces (figures) like e.g. Go (GM[1]) the Stone type is reduced to the Point type below, e.g. "list of stone" becomes "list of point" for that game.
+Note: if a property allows "list of stone" a reduction to "list of point" allows compressed point lists.
+
+    Go, Othello, Gomuku, Renju: Stone becomes Point
+    Chess
+    Nine Men's Morris
+    Chinese chess
+    Shogi
+    Backgammon, Lines of Action, Hex, Gess: Stone becomes Point
+    Amazons
+    Octi 
+
+3.5. Move / Point
+These two types are game specific.
+
+    Go
+    Othello
+    Chess
+    Gomoku, Renju
+    Nine Men's Morris
+    Backgammon
+    Chinese chess
+    Shogi
+    Lines of Action
+    Hex
+    Amazons
+    Gess
+    Octi 
+
+3.5.1. Compressed point lists
+The PropValue type "list of point" or "elist of point" may be compressed.
+Compressing is done by specifying rectangles instead of listing every single point in the rectangle. Rectangles are specified by using the upper left and lower right corner of the rectangle.
+
+Definition:
+List of point: list of (point | composition of point ":" point)
+For the composed type the first point specifies the upper left corner,
+the second point the lower right corner of the rectangle.
+1x1 Rectangles are illegal - they've to be listed as single point.
+
+The definition of 'point list' allows both single point [xy] and rectangle [ul:lr] specifiers in any order and combination. However the points have to be unique, i.e. overlap and duplication are forbidden.
+
+To get an idea have a look at an example. 

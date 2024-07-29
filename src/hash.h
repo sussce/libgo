@@ -4,37 +4,36 @@
 #define MUL 29
 #define SIZE 1024
 
-struct _elt {
-  char* id;
+typedef struct _p_entry p_entry;
 
-  unsigned int token;
-  unsigned long uid;
+struct _p_entry {
+  char* id;
+  uint token;
+  ulong uid;
   
-  int (*check) (Prop* prop);
-  void (*exec) (Prop* prop);
+  int (*check)();  
+  void (*exec)();
   int data;
 };
 struct _dict {
   int size;  
   int n;
-  elt** hash;
+  p_entry** hash;
 };
 
-static unsigned long hash_prop(const char* key) {
-  unsigned const char* p;
-  unsigned long h;
+static ulong hash(const char* key) {
+  const uchar* p;
+  ulong h;
 
   h = 0;
-  for(p = (unsigned const char*)key; *p; p++)
+  for(p = (const uchar*)key; *p; p++)
     h = h * MUL + *p;
 
   return h;
 }
 
-hash_add();
-
 elt* hash_get(Dict dict, char* key) {
-  elt* e;
+  p_entry* e;
   int uid;
 
   uid = hash(key);

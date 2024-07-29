@@ -8,6 +8,7 @@
 
 #include "node.h"
 #include "prop.h"
+#include "predef.h"
 
 /*
 ( ;
@@ -22,15 +23,7 @@ C [
  ;B[aa] C[a1] ;W[b]C[b1] (;B[cc]C[c1] ;W[dd]C[d1]) (;B[ee]C[e1] ;W[ff]C[f1]))
 */
 
-#define in_unset 0u
-#define in_root 1u
-#define in_node 2u
-#define in_next 4u
-#define in_sib 8u
-#define in_pid 16u
-#define in_pv 32u
-
-int check_pid(char** pid) {
+int check_pid(char** pid, int inchar) {
   char *end = *pid + strlen(*pid),
     *new = NULL;
   
@@ -49,7 +42,7 @@ int check_pid(char** pid) {
 }
 
 //char p[] = {'\', '[', '4', '\', ']', '\0'};
-int check_pv(char** pv) {
+int check_pv(char** pv, char* pid) {
   char *end = *pv + strlen (*pv),
     *new = NULL;
   int sz = 0;
@@ -109,8 +102,12 @@ Prop* t_parse_prop(char** curr, int prev) {
   int inchar = in_unset;
 
   while(*curr < (*curr + strlen(*curr))) {
+    char ch;
+    
     if(isalpha((int)(**curr))) {
-      if(inchar != in_unset && inchar != in_pid && !(inchar & in_pv)) {
+      if(inchar != in_unset &&
+         inchar != in_pid &&
+         !(inchar & in_pv)) {
         fprintf(stderr, "char %c must follow chars ;[]c", **curr);
         exit(-1);
       }
@@ -120,7 +117,7 @@ Prop* t_parse_prop(char** curr, int prev) {
         continue;
       }
       
-      //if(inchar == in_unset) {
+      //if(inchar == in_unset)
       if(prop == NULL) {
         prop = p_new();
         pos = *curr;
@@ -146,7 +143,7 @@ Prop* t_parse_prop(char** curr, int prev) {
       pid = t_alloc(pos, *curr - pos);
 
       // check pid
-      if(!check_pid(&pid)) {}
+      if(!check_pid(&pid, prev)) {}
 
       // set pid
       prop->id = pid;
@@ -167,11 +164,11 @@ Prop* t_parse_prop(char** curr, int prev) {
         continue;
       }
       
-      // get pv
+      //get pv
       pv = t_alloc(pos, *curr - pos);
      
-      // check pv
-      if(!check_pv(&pv)) {}
+      //check pv
+      if(!check_pv(&pv, prop->id)) {}
 
       // set pv
       value = v_add(v_new(), value);      
@@ -180,6 +177,7 @@ Prop* t_parse_prop(char** curr, int prev) {
       if(prop->value == NULL)
         prop->value = value;
 
+      //if(!list_t || list_end)
       return prop;
     }
     
