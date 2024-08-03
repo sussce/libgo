@@ -11,13 +11,11 @@ struct _p_entry {
   uint token;
   ulong uid;
   
-  int (*check)();  
-  void (*exec)();
-  int data;
+  int (*check)();
 };
 struct _dict {
-  int size;  
-  int n;
+  int size;
+  int n_entry;
   p_entry** hash;
 };
 
@@ -32,13 +30,13 @@ static ulong hash(const char* key) {
   return h;
 }
 
-elt* hash_get(Dict dict, char* key) {
-  p_entry* e;
+p_entry* hash_get(struct _dict* dict, const char* key) {
+  p_entry* p;
   int uid;
 
   uid = hash(key);
-  e = *(dict->hash + uid % dict->size);
-  return e;
+  p = *(dict->hash + uid % dict->size);
+  return p;
 }
 
 #endif /* _HASH_H_ */

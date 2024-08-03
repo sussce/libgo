@@ -6,9 +6,9 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "predef.h"
 #include "node.h"
 #include "prop.h"
-#include "predef.h"
 
 /*
 ( ;
@@ -81,18 +81,18 @@ int check_pv(char** pv, char* pid) {
   return 1;
 }
 
-char* t_alloc(char* start, size_t size) {
-  char* p = (char*)malloc((size + 1)*sizeof(char));
+char* t_alloc(char* p, size_t size) {
+  char* new = (char*)malloc((size + 1)*sizeof(char));
 
-  if(p == NULL) {
+  if(new == NULL) {
     fprintf(stderr, "t_alloc(), mem alloc failed\n");
     exit(-1);
   }
 
-  memset(p, 0, size + 1);
-  memcpy(p, start, size);
+  memset(new, 0, size + 1);
+  memcpy(new, p, size);
 
-  return p;
+  return new;
 }
 
 Prop* t_parse_prop(char** curr, int prev) {
@@ -309,8 +309,6 @@ Node* t_parse(char** curr, Node* pnode, int prev) {
       node = n_add(t_parse_node(curr,
                                 ((inchar == in_root) && (prev == in_root)) ?
                                 in_root : in_node), node);
-      
-      //printf("\n");
       
       //if(inchar == in_root)
       if(root == NULL)

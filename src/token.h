@@ -104,7 +104,7 @@ New properties are marked with '*', changed properties are marked with '!'.
 
 int max_bits(ulong n) {
   int c;
-  for(c = 0; n; c++, n >>= 1 );
+  for(c = 0; n; c++, n >>= 1);
   return c;
 }
 
@@ -126,7 +126,7 @@ uint tkn_gen(char* id, int type) {
 }
 
 void tkn_gen() {
-#define u(token) hash_add(#token, TKN_##token)
+#define u(token) tkn_add(#token, TKN_##token)
   TKN
 #undef x
 }

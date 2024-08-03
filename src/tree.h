@@ -8,6 +8,9 @@
 
 #include "predef.h"
 
+#define read_once(var, val) 
+#define write_once(var, val) (var = val)
+  
 #define t_ptr(ptr, type, member) \
   container_of(ptr, type, member)
 
@@ -24,13 +27,17 @@ struct _L {
   L *prev, *next;
 };
 
-static uint id_atom = 0;
-
 typedef void (*t_call)(T* t);
 
+static uint id_atom = 0;
+
+static void t_free(T* t) {}
+
+static void l_free(L* l) {}
+
 static inline void l_init(L* l) {
-  l->prev = l;
-  l->next = l;
+  write_once(l->prev, l);
+  write_once(l->next, l);
 }
 
 static inline L* l_add(L* l, L* pl) {
@@ -50,7 +57,7 @@ static inline L* l_add(L* l, L* pl) {
 }
 
 static inline void t_init(T* t, int id) {
-  t->id = id == -1 ? id_atom++ : id;
+  write_once(t->id, id == -1 ? id_atom++ : id);
 }
 
 static inline T* t_add(T* t, T* pt) {

@@ -3,7 +3,7 @@
 
 #include "predef.h"
 
-/* EBNF def
+/* EBNF
 prop     : id value+
 id       : UcLetter+
 value    : [cvtype]
@@ -15,13 +15,13 @@ compose  : vtype : vtype
 vtype    : none |
            number | real |
            double | color |
-           simple | text |
+           text | simple |
            point | move | stone
 
 list of  : value+
 elist of : value+ | none */
 
-/* EBNF def: vtype
+/*
 real   : float
 
 double : 1 | 2
@@ -36,16 +36,17 @@ stone  :
 
 list of point : list of (point | (point : point)) */
 
-/* flag, 32-bits
+/* token, 32-bits
    uuuu uuuu uuuu vvvv vvvv vvvv tttt tttt */
-
-/* markup anno */
 
 /* type */
 #define root 0x1u
 #define setup 0x2u
 #define ginfo 0x4u
 #define move 0x8u
+
+#define anno
+#define markup
 
 /* vtype */
 #define number 0x100u
@@ -117,24 +118,21 @@ V    Value           -                real
 
 */
 
-#define black
-#define white
-
 /* uid */
 #define uid_mask 0xfff00000
 #define uid_bit  20
 #define uid_bits 12
 #define UID(tkn) (((tkn) & uid_mask) >> uid_bit)
 
-#define anno
-#define markup
+#define black
+#define white
 
-enum {
+enum _markup {
   ar_m, cr_m, dd_m, lb_m,
   ln_m, ma_m, sl_m, sq_m, tr_m
 };
 
-enum {
+enum _annotation {
   bm_an, te_an, do_an, it_an,
   gb_an, gw_an, dm_an, ho_an,
   uc_an, c_an, n_an, v_an

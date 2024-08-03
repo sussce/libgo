@@ -5,10 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "predef.h"
 #include "tree.h"
-
-typedef unsigned int uint;
-typedef unsigned long ulong;
 
 typedef struct _Prop Prop;
 typedef struct _Value Value;

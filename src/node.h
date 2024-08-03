@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "predef.h"
 #include "prop.h"
 #include "tree.h"
-#include "predef.h"
 
 typedef struct _Node Node;
 

@@ -35,23 +35,27 @@ LB[]                                 -              list of point : simple     c
 ;B[qq]BL[8]
 ;W[pp]WL[9]
 
-struct _game {
-  float bl;
-  float wl;
-  int capture;
-  int visit;
-};
-
-struct _board {
+struct _sgf {
   int sz;
   char* ru;
   float km;
   int ha;
   char* re;
-  char* PB;
-  char* PW;
+  char* pb;
+  char* pw;
 };
 
-struct _sgf {
-  int ff;
+struct _board {
+  int sz;
+  uchar board_array[];
+  
+  int mn;
+  int ko;
+  int cap_b;
+  int cap_w;
+};
+
+struct _sgf_tree {
+  Node* root;
+  Node* curr;
 };
