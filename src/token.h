@@ -182,7 +182,7 @@ uint tkn_gen(char* id, uint type) {
   return tkn;
 }
 
-void _tkn_gen() {
+void tkn_list() {
 #define u(token) //tkn_add(#token, TKN_##token)
   TKN
 #undef u

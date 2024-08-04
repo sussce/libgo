@@ -37,29 +37,29 @@ list of point : list of (point | (point : point)) */
    uuuu uuuu uuuu vvvv vvvv vvvv tttt tttt */
 
 /* type */
-#define root 0x1u
-#define setup 0x2u
-#define ginfo 0x4u
-#define move 0x8u
-#define anno 0x10u
-#define markup 0x20u
+#define ROOT 0x1u
+#define SETUP 0x2u
+#define GINFO 0x4u
+#define MOVE 0x8u
+#define ANNO 0x10u
+#define MARKUP 0x20u
 
 /* vtype */
-#define number 0x100u
-#define real 0x200u
-#define double 0x400u
-#define color 0x800u
-#define text 0x1000u
-#define simple 0x2000u
-#define none 0x4000u
-#define point 0x8000u
+#define NUMBER 0x100u
+#define REAL 0x200u
+#define DOUBLE 0x400u
+#define COLOR 0x800u
+#define TEXT 0x1000u
+#define SIMPLE 0x2000u
+#define NONE 0x4000u
+#define POINT 0x8000u
 
-#define list 0x10000u
-#define compose 0x20000u
-#define weak 0x40000u
-/* #define compress 0x80000u */
-#define clist list|weak
-#define elist list|weak|none
+#define LIST 0x10000u
+#define COMPOSE 0x20000u
+#define WEAK 0x40000u
+
+#define CLIST LIST|WEAK
+#define ELIST LIST|WEAK|NONE
 
 /*
 FF[4]                                root	          number (range: 1-4)        root|number
@@ -115,8 +115,9 @@ V    Value                           -              real                       a
 #define uid_bits 12
 #define UID(tkn) (((tkn) & uid_mask) >> uid_bit)
 
-#define black
-#define white
+#define EMPTY
+#define BLACK
+#define WHITE
 
 enum _markup {
   ar_m, cr_m, dd_m, lb_m,
@@ -129,22 +130,29 @@ enum _annotation {
   uc_an, c_an, n_an, v_an
 };
 
+struct _ {
+  int sz;
+  char* ru;
+  float km;
+  int ha;
+  char* re;
+  char* pb;
+  char* pw;
+};
 
-/*
+struct _ {
+  int sz;
+  uchar board[];
+  
+  int cap_b;
+  int cap_w;
+};
+
+struct _sgf_tree {
+  Node* root;
+  Node* curr;
+};
+
 int check_*(uint token);
-
-int check_root();
-int check_number_real();
-int check_double_color();
-int check_text_simple();
-int check_point_move_stone_pos();
-int check_compose();
-int check_none();
-
-int do_move();
-int do_anno();
-int do_markup(int arg);
-int do_view();
-*/
 
 #endif /* _SGF_H_ */
