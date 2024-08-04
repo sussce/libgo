@@ -17,6 +17,8 @@ PW[kata1-b28c]
 C[comment]                           -              text
 
 GB[1] [2]                            -              double
+GW[1] [2]                            -              double
+
 PL[B] [W]                            setup          color
 
 SZ[9] [9:9]                          root           number | number : number   compose|weak

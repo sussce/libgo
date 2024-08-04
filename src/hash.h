@@ -19,7 +19,8 @@ struct _dict {
   p_entry** hash;
 };
 
-static ulong hash(const char* key) {
+static
+ulong hash(const char* key) {
   const uchar* p;
   ulong h;
 
@@ -30,6 +31,7 @@ static ulong hash(const char* key) {
   return h;
 }
 
+static
 p_entry* hash_get(struct _dict* dict, const char* key) {
   p_entry* p;
   int uid;

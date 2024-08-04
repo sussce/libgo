@@ -19,14 +19,11 @@ vtype    : none |
            point | move | stone
 
 list of  : value+
-elist of : value+ | none */
+elist of : value+ | none
 
-/*
 real   : float
-
 double : 1 | 2
 color  : B | W
-
 text   : formatted string. whitespace other than linebreak are converted to space (e.g. no tab, vertical tab, ..).
 simple : simple string. whitespace other than space are converted to space, i.e. no newline.
 
@@ -44,78 +41,72 @@ list of point : list of (point | (point : point)) */
 #define setup 0x2u
 #define ginfo 0x4u
 #define move 0x8u
-
-#define anno
-#define markup
+#define anno 0x10u
+#define markup 0x20u
 
 /* vtype */
 #define number 0x100u
-#define real
+#define real 0x200u
+#define double 0x400u
+#define color 0x800u
+#define text 0x1000u
+#define simple 0x2000u
+#define none 0x4000u
+#define point 0x8000u
 
-#define double
-#define color
-
-#define text
-#define simple
-
-#define point
-
-#define list
-#define compose
-#define weak
-#define compress
-
-#define none
+#define list 0x10000u
+#define compose 0x20000u
+#define weak 0x40000u
+/* #define compress 0x80000u */
+#define clist list|weak
+#define elist list|weak|none
 
 /*
-HA[4]                                ginfo (Go)     number                     number
-KM[6.5]                              ginfo (Go)     real                       real
-
-GB[1] [2]                            -              double                     double
+FF[4]                                root	          number (range: 1-4)        root|number
+HA[4]                                ginfo (Go)     number                     ginfo|number
+KM[6.5]                              ginfo (Go)     real                       ginfo|real
 PL[B] [W]                            setup          color                      color
+BR[9d]                               ginfo          simple                     ginfo|simple
+MN[10]                               move           number                     move|number
+KO[]                                 move           none                       move|none
 
-C[comment]                           -              text                       text
-BR[9d]                               ginfo          simple                     simple
+B[dd]                                move           move                       
+W[dd]                                move           move                       
 
-B[dd]                                move           move                       move
+SZ[9] [9:9]                          root           number | number : number   root|weak|number
+AP[goban:1.0]                        root           simple : simple            root|compose|simple
+FG[n:diagram]                        -              none | number : simple     weak|number|simple|none
 
-KO[]                                 move           none                       none
-
-SZ[9] [9:9]                          root           number | number : number   compose|weak
-AP[goban:1.0]                        root           simple : simple            compose    
-FG[n:diagram]                        -              none | number : simple     none|compose|weak
-
-AW[ab][ac][ad][nn] [ab:ad][nn]       setup          list of stone              compose|weak|compress
-AE[ab][ac][ad][nn] [ab:ad][nn]       setup          list of point              compose|weak
-VW[ab][ac][ad][nn] [ab:ad][nn] []    - (inherit)    elist of point             none|compose|weak
+AW[ab][ac][ad][nn] [ab:ad][nn]       setup          list of stone              setup|list|weak
+AE[ab][ac][ad][nn] [ab:ad][nn]       setup          list of point              setup|list|weak
+VW[ab][ac][ad][nn] [ab:ad][nn] []    - (inherit)    elist of point             list|weak|none
 
 //markup
-AR[aa:bb][cc:dd]                     -              list of point : point      compose
-LN[aa:bb][cc:dd]                     -              list of point : point      compose
-LB[aa:A][bb:B]                       -              list of point : simple     compose
-CR   Circle          -                list of point
-*DD  Dim points      - (inherit)      elist of point
-MA   Mark            -                list of point
-SL   Selected        -                list of point
-*SQ  Square          -                list of point
-TR   Triangle        -                list of point
+AR[aa:bb][cc:dd]                     -              list of point : point      markup|list|compose
+LN[aa:bb][cc:dd]                     -              list of point : point      markup|list|compose
+LB[aa:A][bb:B]                       -              list of point : simple     markup|list|compose|simple
+CR   Circle                          -              list of point              markup|list|weak
+*DD  Dim points                      - (inherit)    elist of point             markup|list|weak|none
+MA   Mark                            -              list of point              markup|list|weak
+SL   Selected                        -              list of point              markup|list|weak
+*SQ  Square                          -              list of point              markup|list|weak
+TR   Triangle                        -              list of point              markup|list|weak
 
 //move anno
-BM   Bad move        move             double
-TE   Good move       move             double
-DO   Doubtful        move             none
-IT   Interesting     move             none
+BM   Bad move                        move           double                     move|anno|double
+TE   Good move                       move           double                     move|anno|double
+DO   Doubtful                        move           none                       move|anno|none
+IT   Interesting                     move           none                       move|anno|none
 
 //node anno
-GB   Good for Black  -                double
-GW   Good for White  -                double
-DM   Even position   -                double
-HO   Hotspot         -                double
-UC   Unclear pos     -                double
-C    Comment         -                text
-N    Nodename        -                simpletext
-V    Value           -                real
-
+GB   Good for Black                  -              double                     anno|double
+GW   Good for White                  -              double                     anno|double
+DM   Even position                   -              double                     anno|double
+HO   Hotspot                         -              double                     anno|double
+UC   Unclear pos                     -              double                     anno|double
+C    Comment                         -              text                       anno|text
+N    Nodename                        -              simpletext                 anno|simple
+V    Value                           -              real                       anno|real
 */
 
 /* uid */
@@ -138,6 +129,8 @@ enum _annotation {
   uc_an, c_an, n_an, v_an
 };
 
+
+/*
 int check_*(uint token);
 
 int check_root();
@@ -152,5 +145,6 @@ int do_move();
 int do_anno();
 int do_markup(int arg);
 int do_view();
+*/
 
 #endif /* _SGF_H_ */
