@@ -45,7 +45,7 @@ static inline void match(char c) {
   step_n();
 }
 
-static void property_id(Prop** head) {
+static void prop_ident(Prop** head) {
   match_only(UcLetter);
 
   char* id = malloc(125*sizeof(char));
@@ -61,14 +61,11 @@ static void property_id(Prop** head) {
     step();
   }
   *p = '\0';
-
-  (*head)->id = id;
-  printf("%s\n", (*head)->id);
   
   match_only('[');
 }
 
-static void property_value(Prop** head) {
+static void prop_value(Prop** head) {
   match('[');
 
   char* value = malloc(1024*sizeof(char));
@@ -91,8 +88,8 @@ static void property(Prop** head) {
   Prop* new = prop_new();
   *head = prop_add(*head, new);
   
-  property_id(head);
-  property_value(head);
+  prop_ident(head);
+  prop_value(head);
 }
 
 static void node(Node** head) {
@@ -111,21 +108,18 @@ static void node(Node** head) {
 static Node* sequence(Node** head) {
   match_only(';');
 
-  Node** root = NULL;
   Node* tmp;
-  
+
   if(!*head)
-    root = head;  
+    node(head);
+  
   tmp = *head;
   head = &tmp;
-  
+    
   for(;;) {
     if(!is_char(';'))
-      break;
+      break;      
     node(head);
-
-    if(root && !*root)
-      *root = *head;
   }
 
   return tmp;
@@ -134,7 +128,7 @@ static Node* sequence(Node** head) {
 static void gtree(Node** head) {
   match('(');
   match_only(';');
-
+    
   Node* last = sequence(head);
 
   for(;;) {

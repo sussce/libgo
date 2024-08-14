@@ -1,7 +1,6 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
-
 #include "tree.h"
 #include "prop.h"
 
@@ -41,6 +40,7 @@ Node* node_new() {
 
   return new;
 }
+
 Node* node_add(Node* head, Node* node) {
   if(!head)
     return node;
