@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+#define eof '\0'
+
+#define ROOT 0x1u
+#define NODE 0x2u
+
+typedef struct _T T;
+typedef struct _L L;
+typedef struct _Prop Prop;
+typedef struct _Node Node;
+
+struct _T {
+    T *next, *next_sib;
+};
+struct _L {
+    L *prev, *next;
+};
+struct _Prop{ 
+    char* id;
+    char* value;
+    L l;
+};
+struct _Node { 
+    Prop* prop; 
+    T t;
+};
+
+static char* str = "(;FF[4]SZ[9]PW[kata-18c]PB[kata-40c];B[aa](;W[bb];B[cc])(;W[dd];B[ee]))";
+static char ch;     
+static char* p;
+
+static void t_error(const char* emsg, char arg) {
+    fprintf(stderr, emsg, arg);
+    exit(-1);
+}
+
+#define is_eof() ch == eof
+
+static inline int is_tkn(char c) {
+  char* tkns = "();[]";
+  
+  if(!!c)
+    return ch == c;
+    
+  for(char* ptr = tkns; *ptr != '\0'; ptr++)
+    if(ch == *ptr)
+      return 1;
+  
+  if(isupper((int)ch))
+    return 1;
+  
+  return 0;
+}
+
+static inline int next_tkn(char c) {
+    for(;;) {
+        ch = *p++;
+        
+        if(is_eof())
+          return 0;
+        if(is_tkn(!!c ? c : 0))
+          return 1;
+    }
+}
+
+static Prop* t_prop() {}
+static Node* t_node() {}
+static Node* t_seq() {}
+
+static Node* t_tree(Node* pnode, uint type) {
+  Node *root = NULL,
+     *node = NULL;
+  
+  for(;;) {
+    if(is_eof()) {
+      t_error("end of file\n", 0);
+    }
+    if(is_tkn('(')) {}
+    if(is_tkn(')')) {}
+    if(is_tkn(';')) {
+        node = t_seq();
+    }
+  
+    next_tkn(0);
+  }
+  
+  return (Node*)0;
+}
+
+int main()
+{
+  p = str;
+  
+  next_tkn(0);
+  Node* root = t_tree(NULL, ROOT);
+     
+  return 0;
+}
