@@ -31,20 +31,16 @@ typedef void (*t_call)(T* t);
 
 static uint id_atom = 0;
 
-static
-void t_free(T* t) {}
+static void t_free(T* t) {}
 
-static
-void l_free(L* l) {}
+static void l_free(L* l) {}
 
-static inline
-void l_init(L* l) {
+static inline void l_init(L* l) {
   write_once(l->prev, l);
   write_once(l->next, l);
 }
 
-static inline
-L* l_add(L* l, L* pl) {
+static inline L* l_add(L* l, L* pl) {
   L* next;
   
   if(pl == NULL)
@@ -60,13 +56,11 @@ L* l_add(L* l, L* pl) {
   return l;
 }
 
-static inline
-void t_init(T* t, int id) {
+static inline void t_init(T* t, int id) {
   write_once(t->id, id == -1 ? id_atom++ : id);
 }
 
-static inline
-T* t_add(T* t, T* pt) {
+static inline T* t_add(T* t, T* pt) {
   if(pt == NULL)
     return t;
 
@@ -89,8 +83,7 @@ T* t_add(T* t, T* pt) {
   return t;
 }
 
-static inline
-T* t_new(int id) {
+static inline T* t_new(int id) {
   T* new = (T*)malloc(sizeof(T));
 
   if(new == NULL) {

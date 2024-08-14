@@ -143,16 +143,15 @@ struct _ {
 struct _ {
   int sz;
   uchar board[];
-  
-  int cap_b;
-  int cap_w;
 };
 
-struct _sgf_tree {
+struct _ {
   Node* root;
   Node* curr;
 };
 
 int check_*(uint token);
+int load_header(struct _*, Node* node);
+int next_move();
 
 #endif /* _SGF_H_ */

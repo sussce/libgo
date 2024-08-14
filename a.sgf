@@ -1,14 +1,5 @@
-(;FF[4]SZ[19]
+(;FF[\[4\]] SZ[\]9]
 
-RU[japanese]
-KM[6.5]
-HA[0]
-RE[W+R]
-PB[kata1-b18c]
-PW[kata1-b28c]
-;AB[ab][ac][ad]
-
-;B[pp]C[0.48 0.52 -0.2];W[dd]C[0.48 0.52 -0.3]
-;B[dp]C[0.48 0.52 -0.3];W[pd]C[0.48 0.52 -0.3]
-;B[dc]C[0.48 0.52 -0.3];W[ed]C[0.48 0.52 -0.3]
-;B[fc]C[0.48 0.52 -0.3];W[cq]C[0.48 0.52 -0.3])
+;B[aa]C[c a] ;W[bb]C[c b]
+(;B[cc]C[c c] ;W[dd]C[c d])
+(;B[ee]C[c e] ;W[ff]C[c f]))
