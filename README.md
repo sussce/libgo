@@ -1,1 +1,1 @@
-libsgf
+libgo
