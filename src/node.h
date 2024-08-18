@@ -22,7 +22,6 @@
 typedef struct _Node Node;
 
 struct _Node {
-  int id;
   Prop* prop;
   T t;
 };

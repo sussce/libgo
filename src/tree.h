@@ -1,7 +1,7 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
-static int _tid_atom = 0;
+static int id = 0;
 
 typedef struct _T T;
 typedef struct _L L;
@@ -21,7 +21,7 @@ static inline void t_init(T* t) {
   t->prev = NULL;
   t->next = NULL;
   t->sib = NULL;
-  t->id = _tid_atom++;
+  t->id = id++;
 }
 
 static inline T* t_add(T* head, T* t) {

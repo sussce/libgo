@@ -9,13 +9,32 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 
 #include <stdio.h>
 #include "sgf_tree.h"
-#include <string.h>
+
+typedef void (*func)();
+
+void n_seq_value(Value* value, L* l, func f);
+void n_seq_prop(Prop* prop, L* l, func f);
+void n_seq_node();
+void n_seq(Node* head, func f);
+
+void print_value(Value* value) {
+  /* printf("[%s]", value->value); */
+}
+
+void print_prop(Prop* prop) {
+  /* printf("%s", prop->id); */
+  /* n_seq_value(prop->value, &prop->value->l, print_value); */
+}
+
+void print_node(Node* node) {
+  /* n_seq_prop(node->prop, &node->prop->l, print_prop); */
+  /* printf("\n"); */
+}
 
 int main(int argc, char** argv) {
   char* file = argv[1];
   Node* root = NULL;
   
   root = gparse(file);
-
   node_print(root);
 }

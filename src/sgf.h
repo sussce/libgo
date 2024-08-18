@@ -1,8 +1,6 @@
 #ifndef _SGF_H_
 #define _SGF_H_
 
-#include "predef.h"
-
 /* EBNF
 prop     : id value+
 id       : UcLetter+
