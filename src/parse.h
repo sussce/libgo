@@ -1,5 +1,5 @@
-#ifndef _SGF_TREE_H_
-#define _SGF_TREE_H_
+#ifndef _PARSE_H_
+#define _PARSE_H_
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -8,12 +8,19 @@
 #include "node.h"
 #include "prop.h"
 
-static FILE* fp;
-static int ch;
-
 #define UcLetter 0xfe
 #define is_char(c) ((ch) == (c))
 #define step() ((ch) = getc(fp))
+
+typedef struct _gtree gtree;
+
+struct _gtree {
+  Node* root;
+  Node* curr;
+};
+
+static FILE* fp;
+static int ch;
 
 void gerror(const char* msg, int arg) {
   fprintf(stderr, msg, arg);
@@ -48,8 +55,8 @@ static inline void match(char c) {
 static void prop_ident(Prop** head) {
   match_only(UcLetter);
 
-  char* id = malloc(125*sizeof(char));
-  char* p = id;
+  char* id = malloc(256*sizeof(char));
+  char* raw = id;
   
   for(;;) {
     if(!is_char('[') && !isupper((int)ch))
@@ -57,10 +64,10 @@ static void prop_ident(Prop** head) {
     if(is_char('['))
       break;
 
-    *p++ = ch;
+    *raw++ = ch;
     step();
   }
-  *p = '\0';
+  *raw = '\0';
   
   match_only('[');
 }
@@ -142,7 +149,7 @@ static void game_tree(Node** head) {
 
 static void collection() {}
 
-Node* gparse(const char* filename) {
+Node* parse(const char* filename) {
   Node* root = NULL;
   
   fp = fopen(filename, "r");
@@ -157,4 +164,4 @@ Node* gparse(const char* filename) {
   return root;
 }
 
-#endif /* _SGF_TREE_H */
+#endif /* _PARSE_H */

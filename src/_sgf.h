@@ -2,37 +2,23 @@
 #define _SGF_H_
 
 /* EBNF
-prop     : id value+
-id       : UcLetter+
-value    : [cvtype]
+  Collection = GameTree { GameTree }
+  GameTree   = "(" Sequence { GameTree } ")"
+  Sequence   = Node { Node }
+  Node       = ";" { Property }
+  Property   = PropIdent PropValue { PropValue }
+  PropIdent  = UcLetter { UcLetter }
+  PropValue  = "[" CValueType "]"
+  CValueType = (ValueType | Compose)
+  ValueType  = (None | Number | Real | Double | Color | SimpleText |
+		Text | Point  | Move | Stone)
 
-UcLetter : A..Z
-cvtype   : vtype | compose
+White space (space, tab, carriage return, line feed, vertical tab and so on) may appear anywhere between PropValues, Properties, Nodes, Sequences and GameTrees.
+There are two types of property lists: 'list of' and 'elist of'.
 
-compose  : vtype : vtype
-vtype    : none |
-           number | real |
-           double | color |
-           text | simple |
-           point | move | stone
-
-list of  : value+
-elist of : value+ | none
-
-real   : float
-double : 1 | 2
-color  : B | W
-text   : formatted string. whitespace other than linebreak are converted to space (e.g. no tab, vertical tab, ..).
-simple : simple string. whitespace other than space are converted to space, i.e. no newline.
-
-point  :
-move   :
-stone  :
-
-list of point : list of (point | (point : point)) */
-
-/* token, 32-bits
-   uuuu uuuu uuuu vvvv vvvv vvvv tttt tttt */
+'list of':    PropValue { PropValue }
+'elist of':   ((PropValue { PropValue }) | None)
+              In other words elist is list or "[]". */
 
 /* type */
 #define ROOT 0x1u
@@ -147,9 +133,5 @@ struct _ {
   Node* root;
   Node* curr;
 };
-
-int check_*(uint token);
-int load_header(struct _*, Node* node);
-int next_move();
 
 #endif /* _SGF_H_ */

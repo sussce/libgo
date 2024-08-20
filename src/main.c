@@ -8,7 +8,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 
 #include <stdio.h>
-#include "sgf_tree.h"
+#include "parse.h"
 
 typedef void (*func)();
 
@@ -34,7 +34,10 @@ void print_node(Node* node) {
 int main(int argc, char** argv) {
   char* file = argv[1];
   Node* root = NULL;
-  
-  root = gparse(file);
+  gtree tree;
+
+  root = parse(file);
   node_print(root);
+
+  tree.root = root;
 }

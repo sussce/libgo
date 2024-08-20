@@ -1,23 +1,10 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
+#include <stdlib.h>
+
 #include "tree.h"
 #include "prop.h"
-
-#include <stddef.h>
-#include <assert.h>
-
-#define typeof_member(T, m)	typeof(((T*)0)->m)
-
-#define __same_type(a, b) \
-  __builtin_types_compatible_p(typeof(a), typeof(b))
-
-#define container_of(ptr, type, member) ({ \
-	void *__mptr = (void *)(ptr); \
-	static_assert(__same_type(*(ptr), ((type *)0)->member) ||	\
-		      __same_type(*(ptr), void), \
-		      "pointer type mismatch in container_of()");	\
-	((type *)(__mptr - offsetof(type, member))); })
 
 typedef struct _Node Node;
 
@@ -59,4 +46,5 @@ void node_print(Node* head) {
   if(head->t.sib)
     node_print(container_of(head->t.sib, Node, t));    
 }
+
 #endif /* _NODE_H_ */

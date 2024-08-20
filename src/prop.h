@@ -1,6 +1,8 @@
 #ifndef _PROP_H_
 #define _PROP_H_
 
+#include <stdlib.h>
+
 #include "tree.h"
 
 typedef struct _Prop Prop;
@@ -42,4 +44,5 @@ Prop* prop_add(Prop* head, Prop* prop) {
   l_add(&head->l, &prop->l);
   return prop;
 }
+
 #endif /* _PROP_H_ */

@@ -1,7 +1,20 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
-static int id = 0;
+#include <stddef.h>
+#include <assert.h>
+
+#define typeof_member(T, m)	typeof(((T*)0)->m)
+
+#define __same_type(a, b) \
+  __builtin_types_compatible_p(typeof(a), typeof(b))
+
+#define container_of(ptr, type, member) ({ \
+	void *__mptr = (void *)(ptr); \
+	static_assert(__same_type(*(ptr), ((type *)0)->member) ||	\
+		      __same_type(*(ptr), void), \
+		      "pointer type mismatch in container_of()");	\
+	((type *)(__mptr - offsetof(type, member))); })
 
 typedef struct _T T;
 typedef struct _L L;
@@ -16,6 +29,8 @@ struct _L {
   L* prev;
   L* next;
 };
+
+static int id = 0;
 
 static inline void t_init(T* t) {
   t->prev = NULL;
@@ -60,4 +75,5 @@ static inline L* l_add(L* head, L* l) {
   
   return l;
 }
+
 #endif /* _TREE_H_ */
