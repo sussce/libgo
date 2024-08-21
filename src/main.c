@@ -8,36 +8,24 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 
 #include <stdio.h>
-#include "parse.h"
+#include "libgo.h"
 
-typedef void (*func)();
+int point_pos(char* pos) {
+  char i = toupper((int)pos[0]);
+  char j = toupper((int)pos[1]);
 
-void n_seq_value(Value* value, L* l, func f);
-void n_seq_prop(Prop* prop, L* l, func f);
-void n_seq_node();
-void n_seq(Node* head, func f);
-
-void print_value(Value* value) {
-  /* printf("[%s]", value->value); */
-}
-
-void print_prop(Prop* prop) {
-  /* printf("%s", prop->id); */
-  /* n_seq_value(prop->value, &prop->value->l, print_value); */
-}
-
-void print_node(Node* node) {
-  /* n_seq_prop(node->prop, &node->prop->l, print_prop); */
-  /* printf("\n"); */
+  return POS(IND(i), IND(j));
 }
 
 int main(int argc, char** argv) {
   char* file = argv[1];
-  Node* root = NULL;
+  gnode* root = NULL;
   gtree tree;
 
-  root = parse(file);
+  root = gparse(file);
+  tree.root = root;
   node_print(root);
 
-  tree.root = root;
+  int pos = point_pos("cd");
+  printf("%d\n", pos);
 }

@@ -1,5 +1,5 @@
-#ifndef _HASH_H_
-#define _HASH_H_
+#ifndef _G_HASH_H_
+#define _G_HASH_H_
 
 #define MUL 29
 #define SIZE 1024
@@ -41,4 +41,4 @@ p_entry* hash_get(struct _dict* dict, const char* key) {
   return p;
 }
 
-#endif /* _HASH_H_ */
+#endif /* _G_HASH_H_ */

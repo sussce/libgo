@@ -10,6 +10,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 #ifndef _LIB_GO_H_
 #define _LIB_GO_H_
 
+#include "gnode.h"
+#include "gprop.h"
+#include "gparse.h"
+#include "gboard.h"
+
 /* EBNF
   Collection = GameTree { GameTree }
   GameTree   = "(" Sequence { GameTree } ")"
@@ -75,9 +80,10 @@ enum _annotation {
   uc_an, c_an, n_an, v_an
 };
 
-typedef struct _Game Game;
+typedef struct _ggame ggame;
+typedef struct _gheader gheader;
 
-struct _Game {
+struct _gheader {
   char* ru;
   float km;
   int ha;
@@ -88,8 +94,12 @@ struct _Game {
   char* wr;
   char* gn;
   char* dt;
-  int sz;
-  
+  int sz;  
+};
+struct _ggame {
+  gheader* header;
+  gtree* tree;
+
   int turn;
   int ko;
   int mn;

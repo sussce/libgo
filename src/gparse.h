@@ -1,12 +1,12 @@
-#ifndef _PARSE_H_
-#define _PARSE_H_
+#ifndef _G_PARSE_H_
+#define _G_PARSE_H_
 
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "tree.h"
-#include "node.h"
-#include "prop.h"
+#include "gerror.h"
+#include "gnode.h"
+#include "gprop.h"
 
 #define UcLetter 0xfe
 #define is_char(c) ((ch) == (c))
@@ -15,22 +15,12 @@
 typedef struct _gtree gtree;
 
 struct _gtree {
-  Node* root;
-  Node* curr;
+  gnode* root;
+  gnode* curr;
 };
 
 static FILE* fp;
 static int ch;
-
-void gerror(const char* msg, int arg) {
-  fprintf(stderr, msg, arg);
-  exit(-1);
-}
-
-void gassert(int cond, const char* msg, int arg) {
-  if(!cond)
-    gerror(msg, arg);
-}
 
 static inline void step_n() {
   for(;;) {
@@ -52,7 +42,7 @@ static inline void match(char c) {
   step_n();
 }
 
-static void prop_ident(Prop** head) {
+static void prop_ident(gprop** head) {
   match_only(UcLetter);
 
   char* id = malloc(256*sizeof(char));
@@ -72,7 +62,7 @@ static void prop_ident(Prop** head) {
   match_only('[');
 }
 
-static void prop_value(Prop** head) {
+static void prop_value(gprop** head) {
   match('[');
 
   char* value = malloc(1024*sizeof(char));
@@ -89,20 +79,20 @@ static void prop_value(Prop** head) {
   match(']');
 }
 
-static void property(Prop** head) {
+static void property(gprop** head) {
   match_only(UcLetter);
 
-  Prop* dummy = prop_new();
+  gprop* dummy = prop_new();
   *head = prop_add(*head, dummy);
   
   prop_ident(head);
   prop_value(head);
 }
 
-static void node(Node** head) {
+static void node(gnode** head) {
   match(';');
 
-  Node* dummy = node_new();
+  gnode* dummy = node_new();
   *head = node_add(*head, dummy);
 
   for(;;) {
@@ -112,7 +102,7 @@ static void node(Node** head) {
   }
 }
 
-static void sequence(Node** head) {
+static void sequence(gnode** head) {
   match_only(';');
     
   for(;;) {
@@ -126,11 +116,11 @@ static void sequence(Node** head) {
   p1 = *p2; \
   p2 = &p1;
 
-static void game_tree(Node** head) {
+static void game_tree(gnode** head) {
   match('(');
   match_only(';');
 
-  Node* dummy;
+  gnode* dummy;
   
   if(!*head)
     node(head);
@@ -149,8 +139,8 @@ static void game_tree(Node** head) {
 
 static void collection() {}
 
-Node* parse(const char* filename) {
-  Node* root = NULL;
+gnode* gparse(const char* filename) {
+  gnode* root = NULL;
   
   fp = fopen(filename, "r");
 
