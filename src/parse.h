@@ -2,7 +2,7 @@
 #define __GM1_PARSE_H__
 
 #if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
-#error "Only "libgo.h" can be included directly."
+#error "Only libgo.h can be included directly."
 #endif
 
 #include <stdlib.h>
@@ -15,13 +15,6 @@
 #define UcLetter 0xfe
 #define is_char(c) ((ch) == (c))
 #define step() ((ch) = getc(fp))
-
-typedef struct _gtree gtree;
-
-struct _gtree {
-  gnode* root;
-  gnode* curr;
-};
 
 static FILE* fp;
 static int ch;

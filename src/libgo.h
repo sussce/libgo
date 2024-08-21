@@ -15,6 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 #include "node.h"
 #include "prop.h"
 #include "parse.h"
+#include "game.h"
 #include "board.h"
 
 /* EBNF
@@ -80,31 +81,6 @@ enum _annotation {
   bm_an, te_an, do_an, it_an,
   gb_an, gw_an, dm_an, ho_an,
   uc_an, c_an, n_an, v_an
-};
-
-typedef struct _ggame ggame;
-typedef struct _gheader gheader;
-
-struct _gheader {
-  char* ru;
-  float km;
-  int ha;
-  char* re;
-  char* pb;
-  char* pw;
-  char* br;
-  char* wr;
-  char* gn;
-  char* dt;
-  int sz;  
-};
-struct _ggame {
-  gheader* header;
-  gtree* tree;
-
-  int turn;
-  int ko;
-  int mn;
 };
 
 #undef __LIB_GO_H_INSIDE__
