@@ -1,9 +1,13 @@
-#ifndef _TYPES_H_
-#define _TYPES_H_
+#ifndef __GM1_TYPES_H__
+#define __GM1_TYPES_H__
+
+#if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
+#error "Only "libgo.h" can be included directly."
+#endif
 
 typedef unsigned int uint;
 typedef unsigned short ushort;
 typedef unsigned long ulong;
 typedef unsigned char uchar;
 
-#endif /* _TYPES_H_ */
+#endif /* __GM1_TYPES_H__ */

@@ -1,12 +1,16 @@
-#ifndef _G_PARSE_H_
-#define _G_PARSE_H_
+#ifndef __GM1_PARSE_H__
+#define __GM1_PARSE_H__
+
+#if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
+#error "Only "libgo.h" can be included directly."
+#endif
 
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "gerror.h"
-#include "gnode.h"
-#include "gprop.h"
+#include "error.h"
+#include "node.h"
+#include "prop.h"
 
 #define UcLetter 0xfe
 #define is_char(c) ((ch) == (c))
@@ -49,15 +53,20 @@ static void prop_ident(gprop** head) {
   char* raw = id;
   
   for(;;) {
-    if(!is_char('[') && !isupper((int)ch))
-      gerror("miss UcLetter\n", 0);
     if(is_char('['))
       break;
-
+    if(isspace((int)ch)) {
+      step_n();
+      break;
+    }
+    if(!isupper((int)ch))
+      gerror("miss UcLetter\n", 0);
+      
     *raw++ = ch;
     step();
   }
   *raw = '\0';
+  (*head)->id = id;
   
   match_only('[');
 }
@@ -154,4 +163,4 @@ gnode* gparse(const char* filename) {
   return root;
 }
 
-#endif /* _PARSE_H */
+#endif /* __GM1_PARSE_H__ */

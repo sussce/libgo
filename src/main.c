@@ -10,22 +10,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 #include <stdio.h>
 #include "libgo.h"
 
-int point_pos(char* pos) {
-  char i = toupper((int)pos[0]);
-  char j = toupper((int)pos[1]);
-
-  return POS(IND(i), IND(j));
-}
-
 int main(int argc, char** argv) {
   char* file = argv[1];
   gnode* root = NULL;
-  gtree tree;
 
   root = gparse(file);
-  tree.root = root;
   node_print(root);
-
-  int pos = point_pos("cd");
-  printf("%d\n", pos);
 }

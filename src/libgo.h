@@ -7,13 +7,15 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 
-#ifndef _LIB_GO_H_
-#define _LIB_GO_H_
+#ifndef __LIB_GO_H__
+#define __LIB_GO_H__
 
-#include "gnode.h"
-#include "gprop.h"
-#include "gparse.h"
-#include "gboard.h"
+#define __LIB_GO_H_INSIDE__
+
+#include "node.h"
+#include "prop.h"
+#include "parse.h"
+#include "board.h"
 
 /* EBNF
   Collection = GameTree { GameTree }
@@ -105,4 +107,6 @@ struct _ggame {
   int mn;
 };
 
-#endif /* _LIB_GO_H_ */
+#undef __LIB_GO_H_INSIDE__
+
+#endif /* __LIB_GO_H__ */

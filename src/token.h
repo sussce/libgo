@@ -1,5 +1,9 @@
-#ifndef _TOKEN_H_
-#define _TOKEN_H_
+#ifndef __GM1_TOKEN_H__
+#define __GM1_TOKEN_H__
+
+#if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
+#error "Only "libgo.h" can be included directly."
+#endif
 
 #include "hash.h"
 
@@ -9,7 +13,6 @@ This is an alphabetical index to all properties defined in FF[4].
 New properties are marked with '*', changed properties are marked with '!'.
 
    ID   Description     property type    property value */
-
 /* *AP  Application     root             composed simpletext ':' simpletext */
 #define TKN_AP 0x7ad22001
 /* *CA  Charset         root             simpletext */
@@ -188,4 +191,4 @@ void tkn_list() {
 #undef u
 }
 
-#endif
+#endif /* __GM1_TOKEN_H__ */

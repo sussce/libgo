@@ -1,10 +1,14 @@
-#ifndef _G_PROP_H_
-#define _G_PROP_H_
+#ifndef __GM1_PROP_H__
+#define __GM1_PROP_H__
+
+#if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
+#error "Only "libgo.h" can be included directly."
+#endif
 
 #include <stdlib.h>
 
 #include "tree.h"
-#include "gerror.h"
+#include "error.h"
 
 typedef struct _gprop gprop;
 typedef struct _gvalue gvalue;
@@ -44,4 +48,4 @@ gprop* prop_add(gprop* head, gprop* prop) {
   return prop;
 }
 
-#endif /* _G_PROP_H_ */
+#endif /* __GM1_PROP_H__ */

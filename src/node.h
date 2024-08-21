@@ -1,11 +1,15 @@
-#ifndef _G_NODE_H_
-#define _G_NODE_H_
+#ifndef __GM1_NODE_H__
+#define __GM1_NODE_H__
+
+#if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
+#error "Only "libgo.h" can be included directly."
+#endif
 
 #include <stdlib.h>
 
 #include "tree.h"
-#include "gerror.h"
-#include "gprop.h"
+#include "error.h"
+#include "prop.h"
 
 typedef struct _gnode gnode;
 
@@ -46,4 +50,4 @@ void node_print(gnode* head) {
     node_print(container_of(head->t.sib, gnode, t));    
 }
 
-#endif /* _G_NODE_H_ */
+#endif /* __GM1_NODE_H__ */

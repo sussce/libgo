@@ -1,5 +1,9 @@
-#ifndef _G_HASH_H_
-#define _G_HASH_H_
+#ifndef __GM1_HASH_H__
+#define __GM1_HASH_H__
+
+#if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
+#error "Only "libgo.h" can be included directly."
+#endif
 
 #define MUL 29
 #define SIZE 1024
@@ -41,4 +45,4 @@ p_entry* hash_get(struct _dict* dict, const char* key) {
   return p;
 }
 
-#endif /* _G_HASH_H_ */
+#endif /* __GM1_HASH_H__ */

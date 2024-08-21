@@ -1,5 +1,9 @@
-#ifndef _TREE_H_
-#define _TREE_H_
+#ifndef __GM1_TREE_H__
+#define __GM1_TREE_H__
+
+#if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
+#error "Only "libgo.h" can be included directly."
+#endif
 
 #include <stddef.h>
 #include <assert.h>
@@ -76,4 +80,4 @@ static inline L* l_add(L* head, L* l) {
   return l;
 }
 
-#endif /* _TREE_H_ */
+#endif /* __GM1_TREE_H__ */
