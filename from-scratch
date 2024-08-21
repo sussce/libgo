@@ -1,0 +1,148 @@
+#Key Features of Go AI Engine
+
+    Monte Carlo Tree Search (MCTS):
+        Use MCTS for decision-making, integrating neural network evaluations for policy and value predictions.
+        Support exploration and exploitation adjustments for varying levels of play (e.g., from beginner to professional level).
+
+    Neural Network Evaluation:
+        Implement a deep neural network to predict policy (move probabilities) and value (win probabilities).
+        Use techniques like residual networks, self-play training, and reinforcement learning to improve the model.
+
+    Game Analysis:
+        Provide post-game analysis, identifying mistakes, best moves, and win rates throughout the game.
+        Estimate and visualize ownership, territory, and influence.
+
+    Support for Different Rulesets:
+        Implement support for various Go rulesets (Japanese, Chinese, Korean, etc.), including different scoring methods and rules for ko and seki.
+
+    Scalability and Performance:
+        Allow for scaling across multiple GPUs for faster processing.
+        Optimize for both speed and accuracy, balancing resource usage with the quality of decisions.
+
+    Configurable Playouts and Simulations:
+        Allow users to configure the number of playouts or simulations per move, adjusting the engine’s strength and computation time.
+        Support for various MCTS configurations (e.g., UCT, PUCT).
+
+    Time Management:
+        Implement effective time management for real-time play, including byo-yomi, Canadian overtime, and Fischer timing.
+
+    Self-Play and Training:
+        Support self-play for training purposes, where the engine can generate training data and improve its neural network.
+        Implement features for self-training with reinforcement learning, like KataGo’s continuous improvement pipeline.
+
+    Move Prediction and Variation Exploration:
+        Allow users to explore alternative move sequences (variations) and predict outcomes for each.
+
+    Integration with Go Servers and GUIs:
+        Provide APIs or plugins for integration with popular Go servers (KGS, OGS) and GUIs (Lizzie, Sabaki).
+        Support for SGF file format for game records, including saving and loading.
+
+Public API Considerations
+
+    Basic API for Playing Moves:
+        play_move(color, position): Submit a move for a given color and position.
+        get_best_move(): Retrieve the AI’s recommended move.
+        get_policy(): Return the policy distribution over all legal moves.
+
+    Game State Management:
+        new_game(board_size, komi, handicap): Initialize a new game with specified parameters.
+        undo_move(): Undo the last move.
+        reset_game(): Reset the game state.
+
+    Analysis and Evaluation:
+        analyze_position(depth): Analyze the current board position to a given depth.
+        get_win_rate(): Return the AI’s estimated win rate for the current position.
+        get_ownership_map(): Provide a map of predicted ownership for each point on the board.
+
+    Configuration and Settings:
+        set_playout_limit(int): Set the maximum number of playouts per move.
+        set_time_limit(seconds): Set the time limit per move.
+        set_ruleset(ruleset): Switch between different rulesets.
+
+    Training and Self-Play:
+        start_self_play(): Start a self-play session for training.
+        load_training_model(filepath): Load a specific model for training or evaluation.
+        save_game_record(filename): Save the current game to an SGF file.
+
+    Visualization and Debugging:
+        export_analysis(filename): Export detailed analysis data for debugging or review.
+        visualize_tree(depth): Visualize the MCTS search tree to a specified depth.
+
+    AI Configuration:
+        set_strength(level): Adjust the AI’s playing strength by tweaking exploration/exploitation, playouts, or neural network depth.
+        toggle_feature(flag): Enable or disable specific features like ownership estimation or influence mapping.
+
+    Logging and Debugging:
+        enable_logging(): Enable detailed logging for debugging purposes.
+        get_logs(): Retrieve logs related to the AI’s decision-making process.
+
+#Features of SGF Parser
+
+    Basic Parsing and Serialization:
+        Load SGF File: Parse and load an SGF file into a structured format (e.g., tree of nodes with properties).
+        Save SGF File: Serialize the structured data back into the SGF format and save it to a file.
+        Support for Multiple Games: Handle SGF files containing multiple game records or variations within the same file.
+        Error Handling: Gracefully handle and report errors in SGF file syntax or content.
+
+    Node and Property Management:
+        Access Nodes: Provide APIs to access specific nodes in the SGF tree (e.g., root node, next node, previous node).
+        Modify Properties: Add, remove, or modify properties (like moves, comments, game information) within nodes.
+        Traversal: APIs to traverse the game tree, moving through variations, branches, or game sequences.
+
+    Property/Value Checking:
+        Validation: Check the validity of properties and values according to SGF specifications (e.g., correct format for coordinates, komi, etc.).
+        Compliance: Ensure SGF files comply with specific SGF versions (e.g., FF[4]).
+
+    Event/Signal Handling:
+        Property Events: Trigger events when certain properties are encountered (e.g., a move, a comment).
+        Custom Signal Functions: Support custom signal functions to handle specific parts of the game, such as simulating moves or generating next moves.
+
+    Integration with Other Tools:
+        AI Engine Interface: Provide hooks to interact with AI engines (e.g., get AI move suggestions based on the current board position).
+        Game Export/Import: Export and import game records in other formats (e.g., JSON, XML).
+
+    Extended Functionality:
+        Game Metadata Extraction: Extract game information (player names, dates, rules) and make it easily accessible.
+        Branch Management: Handle game variations and branches effectively, allowing users to explore and edit alternative sequences.
+
+#Features of GUI Client
+
+    Basic UI Features:
+        Board Display: Render the Go board with stones, grid, coordinates, and markers.
+        Move Input: Allow users to input moves by clicking on the board.
+        Game Navigation: Provide controls to navigate through the game (e.g., forward, backward, jump to start/end).
+
+    SGF Integration:
+        Load/Save SGF: Load game records from SGF files and save current games or variations to SGF.
+        Game Info Display: Display game metadata (players, handicap, komi, result, etc.) extracted from SGF.
+
+    AI Integration:
+        AI Assistance: Allow users to request AI suggestions for the next move.
+        Game Analysis: Integrate with AI to analyze the current game, highlighting mistakes and suggesting better moves.
+        Self-Play/Training: Support AI self-play and training modes where the engine plays both sides.
+
+    Game Modes and Rules:
+        Support Different Rulesets: Provide options to play under different Go rulesets (Japanese, Chinese, etc.).
+        Time Settings: Implement various timing systems (byo-yomi, Canadian, etc.).
+
+    Game Review and Editing:
+        Variation Support: Allow users to explore and create game variations, adding comments and annotations.
+        Move Annotations: Support for marking moves (e.g., good, bad, interesting) and adding comments to specific moves.
+
+    Interactive Features:
+        Hint and Undo: Provide options for hinting the next move and undoing previous moves.
+        Score Estimation: Implement a scoring feature to estimate territory and capture status during and after the game.
+
+    Customization and Settings:
+        Theme and Layout Customization: Allow users to customize the appearance of the board, stones, and interface.
+        User Preferences: Store and load user preferences for board size, ruleset, and AI difficulty.
+
+    Multiplayer and Online Features:
+        Online Play: Integrate with online Go servers for multiplayer games.
+        Chat and Social Features: Provide in-game chat and social features to interact with other players.
+        Replay and Sharing: Support replaying games and sharing game records via email, social media, or other platforms.
+
+    Debugging and Logging:
+        Debug Mode: Include a debug mode for advanced users to see detailed logs of the game’s internal state.
+        Error Reporting: Capture and report errors gracefully, providing feedback to the user.
+
