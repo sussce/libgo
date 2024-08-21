@@ -1,4 +1,4 @@
-#Key Features of Go AI Engine
+#Features of Go AI Engine
 
     Monte Carlo Tree Search (MCTS):
         Use MCTS for decision-making, integrating neural network evaluations for policy and value predictions.
