@@ -2,7 +2,7 @@
 #define __GM1_TYPES_H__
 
 #if !defined (__LIB_GO_H_INSIDE__) && !defined (LIBGO_COMPILATION)
-#error "Only libgo.h can be included directly."
+#error "only libgo.h can be included directly."
 #endif
 
 typedef unsigned int uint;
