@@ -12,6 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. */
 
 #define __LIB_GO_H_INSIDE__
 
+#include "types.h"
 #include "node.h"
 #include "prop.h"
 #include "parse.h"

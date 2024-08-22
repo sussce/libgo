@@ -1,0 +1,10 @@
+compile:
+$ make
+$ make test
+
+run:
+$ ./test_main
+
+cleanup:
+$ make clean
+$ rm ./test_main
