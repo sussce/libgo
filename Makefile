@@ -20,8 +20,9 @@ test: test_main
 $(bin): $(obj)
 	$(CC) $(ldflags) -o $@ $(obj)
 
+#-Wl,-rpath,.
 test_main: test/test.c
-	$(CC) -Wl,-rpath,. -L. -lgo $(include) -o $@ $< 
+	LD_LIBRARY_PATH=. $(CC) -L. -lgo $(include) -o $@ $< 
 
 %.o: %.c
 	$(CC) $(cflags) $(include) -c -o $@ $<

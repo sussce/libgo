@@ -3,7 +3,7 @@ $ make
 $ make test
 
 run:
-$ ./test_main
+$ LD_LIBRARY_PATH=. ./test_main
 
 cleanup:
 $ make clean
