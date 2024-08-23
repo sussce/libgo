@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "libgo.h"
 
 int main(int argc, char** argv) {
@@ -9,7 +11,7 @@ int main(int argc, char** argv) {
   
   char* file = argv[1];
   gnode* root;
-
+  
   root = gparse(file);
   node_print(root);
 }

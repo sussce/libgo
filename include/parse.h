@@ -5,8 +5,6 @@
 #error "only libgo.h can be included directly."
 #endif
 
-#include "node.h"
-
 gnode* gparse(const char* filename);
 
 #endif /* __GM1_PARSE_H__ */

@@ -1,9 +1,10 @@
 CC ?= gcc
 cflags = -DLIBGO_COMPILE -fPIC 
 ldflags = -shared
-include = -Isrc
+include = -Iinclude
+precompile = -include types.h
 
-src = src/main.c
+src = src/node.c src/prop.c src/parse.c src/board.c src/game.c
 obj = $(src:.c=.o)
 bin = libgo.so
 
@@ -24,4 +25,4 @@ test_main: test/test.c
 	LD_LIBRARY_PATH=. $(CC) -L. -lgo $(include) -o $@ $< 
 
 %.o: %.c
-	$(CC) $(cflags) $(include) -c -o $@ $<
+	$(CC) $(cflags) $(include) $(precompile) -c -o $@ $<

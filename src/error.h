@@ -5,14 +5,15 @@
 #error "only libgo.h can be included directly."
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 
-void gerror(const char* msg, int arg) {
+static void gerror(const char* msg, int arg) {
   fprintf(stderr, msg, arg);
   exit(-1);
 }
 
-void gassert(int cond, const char* msg, int arg) {
+static void gassert(int cond, const char* msg, int arg) {
   if(!cond)
     gerror(msg, arg);
 }
