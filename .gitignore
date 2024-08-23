@@ -1,0 +1,5 @@
+*.o
+*.a
+*.so
+src/*.o
+test_main
