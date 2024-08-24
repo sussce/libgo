@@ -7,4 +7,3 @@ $ LD_LIBRARY_PATH=. ./test_main
 
 cleanup:
 $ make clean
-$ rm ./test_main
