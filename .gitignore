@@ -2,4 +2,5 @@
 *.a
 *.so
 src/*.o
+test/Makefile
 test_main
