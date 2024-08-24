@@ -6,9 +6,11 @@ ifeq ($(origin CC),default)
 CC := gcc
 endif
 
-dir := ../src
-files := $(dir)/*.c
-obj := $(files:.c=.o)
+bin = libgo.so
 
-all:
-	@echo $(files)
+src = libgo.c
+
+all:  test_main
+
+test_main: $(bin) $(src)
+	@echo $(<F)

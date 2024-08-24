@@ -6,8 +6,18 @@ ifeq ($(origin CC),default)
 CC := gcc
 endif
 
-CFLAGS = -DLIBGO_COMPILE -fPIC 
-LDFLAGS = -shared
+ifndef CFLAGS
+CFLAGS = -O2
+endif
+
+CFLAGS += -fPIC
+CFLAGS += -DLIBGO_COMPILE
+
+ifndef LDFLAGS
+LDFLAGS = 
+endif
+
+LDFLAGS += -shared
 
 includes = -Iinclude
 precompile = -include types.h
@@ -27,8 +37,8 @@ $(bin): $(obj)
 .PHONY: test
 test: test_main
 
-test_main: test/test.c
-	LD_LIBRARY_PATH=. $(CC) -L. -lgo $(includes) -o $@ $< 
+test_main: $(bin) test/test.c
+	LD_LIBRARY_PATH=. $(CC) -L. -lgo $(includes) -o $@ $(filter-out $<,$^)
 
 .PHONY: clean
 clean:

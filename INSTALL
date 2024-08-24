@@ -1,9 +1,9 @@
-compile:
+compile)
 $ make
 $ make test
 
-run:
-$ LD_LIBRARY_PATH=. ./test_main
+run)
+$ LD_LIBRARY_PATH=. ./test_main /FILE/PATH/
 
-cleanup:
+cleanup)
 $ make clean
