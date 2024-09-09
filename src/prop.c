@@ -3,6 +3,27 @@
 
 #include <stdlib.h>
 
+gvalue* value_new() {
+  gvalue* new = malloc(sizeof(gvalue));
+
+  if(!new)
+    gerror("value_new(), out of memory\n", 0);
+
+  new->value = NULL;
+  l_init(&new->l);
+
+  return new;
+}
+
+gvalue* value_add(gvalue* head, gvalue* value){
+   if(!head)
+    return value;
+
+   l_add(&head->l, &value->l);
+   
+   return value;
+}
+
 gprop* prop_new() {
   gprop* new = malloc(sizeof(gprop));
 

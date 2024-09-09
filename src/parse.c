@@ -4,6 +4,7 @@
 #include "error.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 
 #define UcLetter 0xfe
@@ -61,18 +62,34 @@ static void prop_ident(gprop** head) {
 static void prop_value(gprop** head) {
   match('[');
 
-  char* value = malloc(1024*sizeof(char));
-  char* p = value;
+  char *value = malloc(1024*sizeof(char)),
+    *raw = value;
   
   for(;;) {
     if(is_char(']'))
       break;
     if(is_char('\\'))
       step();
+
+    *raw++ =ch;
     step();
   }
-
+  *raw = '\0';
+  
+  gvalue* dummy = value_new();  
+  (*head)->value = value_add((*head)->value, dummy);
+  (*head)->value->value = value;
+  
   match(']');
+}
+
+void value_iter(gvalue* head) {
+  gvalue* a = head;
+
+  do {
+    printf("[%s]", head->value);
+    head = container_of(head->l.next, gvalue, l);
+  } while(head != a);
 }
 
 static void property(gprop** head) {
@@ -80,9 +97,26 @@ static void property(gprop** head) {
 
   gprop* dummy = prop_new();
   *head = prop_add(*head, dummy);
+ 
+  int list_t = 0;
   
   prop_ident(head);
-  prop_value(head);
+  printf("%s", (*head)->id);
+  
+  if(strcmp((*head)->id, "AW") == 0 ||
+     strcmp((*head)->id, "AB") == 0)
+    list_t = 1;
+
+  for(;;) {
+    prop_value(head);
+
+    // if((*head)->tkn && LIST)
+    if(!list_t)
+      break;
+    if(!is_char('['))
+      break;
+  }
+  value_iter((*head)->value);
 }
 
 static void node(gnode** head) {

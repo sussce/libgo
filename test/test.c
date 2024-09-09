@@ -13,5 +13,5 @@ int main(int argc, char** argv) {
   gnode* root;
   
   root = gparse(file);
-  node_print(root);
+  //node_print(root);
 }

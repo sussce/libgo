@@ -10,10 +10,6 @@
 typedef struct _gprop gprop;
 typedef struct _gvalue gvalue;
 
-struct _gvalue {
-  char* value;
-  L l;
-};
 struct _gprop {
   char* id;
   gvalue* value;
@@ -21,7 +17,13 @@ struct _gprop {
   ulong uid;
   L l;
 };
+struct _gvalue {
+  char* value;
+  L l;
+};
 
+gvalue* value_new();
+gvalue* value_add(gvalue* head, gvalue* value);
 gprop* prop_new();
 gprop* prop_add(gprop* head, gprop* prop);
 

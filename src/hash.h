@@ -8,23 +8,25 @@
 #define MUL 29
 #define SIZE 1024
 
-typedef struct _p_entry p_entry;
+typedef struct _hprop_entry hprop_entry;
+typedef struct _hprop_dict hprop_dict;
 
-struct _p_entry {
+struct hprop_entry {
   char* id;
   uint token;
   ulong uid;
   
   int (*check)();
+
+  hprop_entry* next;
 };
-struct _dict {
+struct _hprop_dict {
   int size;
   int n_entry;
-  p_entry** hash;
+  hprop_entry** htable;
 };
 
-static
-ulong hash(const char* key) {
+static ulong hash_prop(const char* key) {
   const uchar* p;
   ulong h;
 
@@ -35,14 +37,18 @@ ulong hash(const char* key) {
   return h;
 }
 
-static
-p_entry* hash_get(struct _dict* dict, const char* key) {
-  p_entry* p;
-  int uid;
+static hprop_entry* hprop_search(hprop_dict* dict, const char* key) {
+  hprop_entry* p;
+  int h;
 
-  uid = hash(key);
-  p = *(dict->hash + uid % dict->size);
-  return p;
+  h = hash_prop(key);
+  for(p = *(dict->htable + h % dict->size);
+      p != NULL;
+      p = p->next) {
+    if(!strcmp(p->id, key))
+      return p;
+  }
+  return NULL
 }
 
 #endif /* __GM1_HASH_H__ */
