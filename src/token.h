@@ -14,149 +14,151 @@ New properties are marked with '*', changed properties are marked with '!'.
 
    ID   Description     property type    property value */
 /* *AP  Application     root             composed simpletext ':' simpletext */
-#define TKN_AP 0x7ad22001
+#define AP_TKN 0x7ad22001
 /* *CA  Charset         root             simpletext */
-#define TKN_CA 0x7d802001
+#define CA_TKN 0x7d802001
 /* FF   Fileformat      root	           number (range: 1-4) */
-#define TKN_FF 0x83400101
+#define FF_TKN 0x83400101
 /* GM   Game            root	           number (range: 1-5,7-16) */
-#define TKN_GM 0x85800101
+#define GM_TKN 0x85800101
 /* *ST  Style           root	           number (range: 0-3) */
-#define TKN_ST 0x9bb00101
+#define ST_TKN 0x9bb00101
 /* !SZ  Size            root	           (number | composed number ':' number) */
-#define TKN_SZ 0x9c140101
+#define SZ_TKN 0x9c140101
 /* AB   Add Black       setup            list of stone */
-#define TKN_AB 0x79f50002
+#define AB_TKN 0x79f50002
 /* AE   Add Empty       setup            list of point */
-#define TKN_AE 0x7a250002
+#define AE_TKN 0x7a250002
 /* AW   Add White       setup            list of stone */
-#define TKN_AW 0x7b450002
+#define AW_TKN 0x7b450002
 /* PL   Player to play  setup            color */
-#define TKN_PL 0x95c00802
+#define PL_TKN 0x95c00802
 /* AN   Annotation      game-info        simpletext */
-#define TKN_AN 0x7ab02004
+#define AN_TKN 0x7ab02004
 /* BR   Black rank      game-info        simpletext */
-#define TKN_BR 0x7cc02004
+#define BR_TKN 0x7cc02004
 /* BT   Black team      game-info        simpletext */
-#define TKN_BT 0x7ce02004
+#define BT_TKN 0x7ce02004
 /* CP   Copyright       game-info        simpletext */
-#define TKN_CP 0x7e702004
+#define CP_TKN 0x7e702004
 /* !DT  Date            game-info        simpletext */
-#define TKN_DT 0x80802004
+#define DT_TKN 0x80802004
 /* EV   Event           game-info        simpletext */
-#define TKN_EV 0x82702004
+#define EV_TKN 0x82702004
 /* GN   Game name       game-info        simpletext */
-#define TKN_GN 0x85902004
+#define GN_TKN 0x85902004
 /* GC   Game comment    game-info        text */
-#define TKN_GC 0x84e01004
+#define GC_TKN 0x84e01004
 /* ON   Opening         game-info        simpletext */
-#define TKN_ON 0x94102004
+#define ON_TKN 0x94102004
 /* *OT  Overtime        game-info        simpletext */
-#define TKN_OT 0x94702004
+#define OT_TKN 0x94702004
 /* PB   Player Black    game-info        simpletext */
-#define TKN_PB 0x95202004
+#define PB_TKN 0x95202004
 /* PC   Place           game-info        simpletext */
-#define TKN_PC 0x95302004
+#define PC_TKN 0x95302004
 /* PW   Player White    game-info        simpletext */
-#define TKN_PW 0x96702004
+#define PW_TKN 0x96702004
 /* !RE  Result          game-info        simpletext */
-#define TKN_RE 0x98f02004
+#define RE_TKN 0x98f02004
 /* RO   Round           game-info        simpletext */
-#define TKN_RO 0x99902004
+#define RO_TKN 0x99902004
 /* HA   Handicap        game-info (Go)   number */
-#define TKN_HA 0x86900104
+#define HA_TKN 0x86900104
 /* KM   Komi            game-info (Go)   real */
-#define TKN_KM 0x8cc00204
+#define KM_TKN 0x8cc00204
 /* TB   Territory Black - (Go)           elist of point */
-#define TKN_TB 0x9c654000
+#define TB_TKN 0x9c654000
 /* TW   Territory White - (Go)           elist of point */
-#define TKN_TW 0x9db54000
+#define TW_TKN 0x9db54000
 /* B    Black           move             move */
-#define TKN_B 0x4200008
+#define B_TKN 0x4200008
 /* KO   Ko              move             none */
-#define TKN_KO 0x8ce04008
+#define KO_TKN 0x8ce04008
 /* MN   set move number move             number */
-#define TKN_MN 0x90700108
+#define MN_TKN 0x90700108
 /* W    White           move             move */
-#define TKN_W 0x5700008
+#define W_TKN 0x5700008
 /* C    Comment         -                text */
-#define TKN_C 0x4301010
+#define C_TKN 0x4301010
 /* DM   Even position   -                double */
-#define TKN_DM 0x80100410
+#define DM_TKN 0x80100410
 /* GB   Good for Black  -                double */
-#define TKN_GB 0x84d00410
+#define GB_TKN 0x84d00410
 /* GW   Good for White  -                double */
-#define TKN_GW 0x86200410
+#define GW_TKN 0x86200410
 /* HO   Hotspot         -                double */
-#define TKN_HO 0x87700410
+#define HO_TKN 0x87700410
 /* N    Nodename        -                simpletext */
-#define TKN_N 0x4e02010
+#define N_TKN 0x4e02010
 /* UC   Unclear pos     -                double */
-#define TKN_UC 0x9e400410
+#define UC_TKN 0x9e400410
 /* V    Value           -                real */
-#define TKN_V 0x5600210
+#define V_TKN 0x5600210
 /* BM   Bad move        move             double */
-#define TKN_BM 0x7c700418
+#define BM_TKN 0x7c700418
 /* DO   Doubtful        move             none */
-#define TKN_DO 0x80304018
+#define DO_TKN 0x80304018
 /* IT   Interesting     move             none */
-#define TKN_IT 0x89904018
+#define IT_TKN 0x89904018
 /* TE   Tesuji          move             double */
-#define TKN_TE 0x9c900418
+#define TE_TKN 0x9c900418
 /* *AR  Arrow           -                list of composed point ':' point */
-#define TKN_AR 0x7af30020
+#define AR_TKN 0x7af30020
 /* CR   Circle          -                list of point */
-#define TKN_CR 0x7e950020
+#define CR_TKN 0x7e950020
 /* *DD  Dim points      - (inherit)      elist of point */
-#define TKN_DD 0x7f854020
+#define DD_TKN 0x7f854020
 /* !LB  Label           -                list of composed point ':' simpletext */
-#define TKN_LB 0x8de32020
+#define LB_TKN 0x8de32020
 /* *LN  Line            -                list of composed point ':' point */
-#define TKN_LN 0x8ea30020
+#define LN_TKN 0x8ea30020
 /* MA   Mark            -                list of point */
-#define TKN_MA 0x8fa50020
+#define MA_TKN 0x8fa50020
 /* SL   Selected        -                list of point */
-#define TKN_SL 0x9b350020
+#define SL_TKN 0x9b350020
 /* *SQ  Square          -                list of point */
-#define TKN_SQ 0x9b850020
+#define SQ_TKN 0x9b850020
 /* TR   Triangle        -                list of point */
-#define TKN_TR 0x9d650020
+#define TR_TKN 0x9d650020
 /* BL   Black time left move             real */
-#define TKN_BL 0x7c600208
+#define BL_TKN 0x7c600208
 /* OB   OtStones Black  move             number */
-#define TKN_OB 0x93500108
+#define OB_TKN 0x93500108
 /* OW   OtStones White  move             number */
-#define TKN_OW 0x94a00108
+#define OW_TKN 0x94a00108
 /* WL   White time left move             real */
-#define TKN_WL 0xa2700208
+#define WL_TKN 0xa2700208
 /* !FG  Figure          -                none | composed number ":" simpletext */
-#define TKN_FG 0x83546100
+#define FG_TKN 0x83546100
 /* *PM  Print move mode - (inherit)      number */
-#define TKN_PM 0x95d00100
+#define PM_TKN 0x95d00100
 /* *VW  View            - (inherit)      elist of point */
-#define TKN_VW 0xa1554000
+#define VW_TKN 0xa1554000
 
-#define TKN                                              \
+#define UNKNOWN_TKN 0x0
+
+#define TKN_INIT                                         \
   /* root */                                             \
-  u(AP) u(CA) u(FF) u(GM) u(ST) u(SZ)                    \
+  _(AP) _(CA) _(FF) _(GM) _(ST) _(SZ)                    \
   /* setup */                                            \
-  u(AB) u(AE) u(AW) u(PL)                                \
+  _(AB) _(AE) _(AW) _(PL)                                \
   /* ginfo */                                            \
-  u(AN) u(BR) u(BT) u(CP) u(DT) u(EV) u(GN)              \
-  u(GC) u(ON) u(OT) u(PB) u(PC) u(PW) u(RE) u(RO)        \
-  u(HA) u(KM) u(TB) u(TW)                                \
+  _(AN) _(BR) _(BT) _(CP) _(DT) _(EV) _(GN)              \
+  _(GC) _(ON) _(OT) _(PB) _(PC) _(PW) _(RE) _(RO)        \
+  _(HA) _(KM) _(TB) _(TW)                                \
   /* move */                                             \
-  u(B) u(KO) u(MN) u(W)                                  \
+  _(B) _(KO) _(MN) _(W)                                  \
   /* node anno*/                                         \
-  u(C) u(DM) u(GB) u(GW) u(HO) u(N) u(UC) u(V)           \
+  _(C) _(DM) _(GB) _(GW) _(HO) _(N) _(UC) _(V)           \
   /* move anno */                                        \
-  u(BM) u(DO) u(IT) u(TE)                                \
+  _(BM) _(DO) _(IT) _(TE)                                \
   /* markup */                                           \
-  u(AR) u(CR) u(DD) u(LB) u(LN) u(MA) u(SL) u(SQ) u(TR)  \
+  _(AR) _(CR) _(DD) _(LB) _(LN) _(MA) _(SL) _(SQ) _(TR)  \
   /* timing */                                           \
-  u(BL) u(OB) u(OW) u(WL)                                \
+  _(BL) _(OB) _(OW) _(WL)                                \
   /* misc */                                             \
-  u(FG) u(PM) u(VW)
+  _(FG) _(PM) _(VW)
 
 int max_bits(ulong n) {
   int c;
@@ -185,10 +187,11 @@ uint tkn_gen(char* id, uint type) {
   return tkn;
 }
 
-void tkn_list() {
-#define u(token) //tkn_add(#token, TKN_##token)
-  TKN
-#undef u
+void tkn_init() {
+  hprop_init();
+#define _(token) hprop_add(#token, token##_TKN)
+  TKN_INIT
+#undef _
 }
 
 #endif /* __GM1_TOKEN_H__ */

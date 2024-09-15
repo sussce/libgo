@@ -1,6 +1,7 @@
 #include "parse.h"
 #include "node.h"
 #include "prop.h"
+#include "token.h"
 #include "error.h"
 
 #include <stdlib.h>
@@ -83,7 +84,7 @@ static void prop_value(gprop** head) {
   match(']');
 }
 
-void value_iter(gvalue* head) {
+void _value_iter(gvalue* head) {
   gvalue* a = head;
 
   do {
@@ -91,6 +92,8 @@ void value_iter(gvalue* head) {
     head = container_of(head->l.next, gvalue, l);
   } while(head != a);
 }
+
+int prop_tkn(gprop** head) {}
 
 static void property(gprop** head) {
   match_only(UcLetter);
@@ -102,21 +105,17 @@ static void property(gprop** head) {
   
   prop_ident(head);
   printf("%s", (*head)->id);
+  prop_tkn(head);
   
-  if(strcmp((*head)->id, "AW") == 0 ||
-     strcmp((*head)->id, "AB") == 0)
-    list_t = 1;
-
   for(;;) {
     prop_value(head);
 
-    // if((*head)->tkn && LIST)
-    if(!list_t)
+    if(!(*head)->tkn & LIST)
       break;
     if(!is_char('['))
       break;
   }
-  value_iter((*head)->value);
+  _value_iter((*head)->value);
 }
 
 static void node(gnode** head) {
@@ -177,6 +176,8 @@ gnode* gparse(const char* filename) {
   if(!fp)
     return NULL;
 
+  tkn_init();
+  
   step_n();
   game_tree(&root);
   
